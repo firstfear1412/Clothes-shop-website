@@ -1,0 +1,75 @@
+﻿@using ClothesShop.ViewModels;
+@model dynamic
+@using System.Globalization;
+
+@{
+	CultureInfo us = new CultureInfo("en-us");
+}
+<div class="container">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-warning">@TempData["ErrorMessage"]</div>
+    }
+</div>
+<!--อ่านค่าจาก Model เป็น Object-->
+@foreach (Cart master in Model.Master)
+{
+    <div class="card bg-light">
+        <div class="card-body">
+            <h4 class="card-title text-primary opacity-75">คำสั่งซื้อเลขที่ @master.CartId</h4>
+            <h5 class="card-subtitle mt-2 text-muted">
+                สั่งซื้อวันที่ @master.CartDate.Value.ToString("yyyy-MMM-dd", us)
+            </h5>
+            <div class="text-danger text-end">
+                จำนวนสินค้า @master.CartQty ยอดเงิน @master.CartMoney.Value.ToString("#,###.##") บาท
+            </div>
+            <hr />
+            <a class="btn btn-danger" asp-controller="Cart" asp-action="Delete"
+               asp-route-cartid="@master.CartId" onclick="return confirm('ยืนยันลบตะกร้า')">
+                <i class="bi-cart-x-fill"></i> ลบตะกร้าสินค้า
+            </a>
+            <a class="btn btn-primary" asp-controller="Cart" asp-action="Confirm"
+               asp-route-cartid="@master.CartId" onclick="return confirm('ยืนยันสั่งสินค้า')">
+                <i class="bi-currency-dollar"></i> ยืนยันสั่งสินค้า
+            </a>
+        </div>
+    </div>
+}
+<table class="table table-hover mt-3 ">
+    <tr class="bg-light">
+        <td></td>
+        <td>สินค้า</td>
+        <td></td>
+        <td class="text-end">ราคาต่อหน่วย</td>
+        <td class="text-center">จำนวน</td>
+        <td class="text-end">เป็นเงิน</td>
+        <td></td>
+    </tr>
+    @{
+        var i = 0;
+    }
+    @foreach (CtdVM detail in Model.Detail)
+    {
+        i++;
+        <tr>
+            <td>@i</td>
+            <td>
+                <a asp-action="Show" asp-controller="Product" asp-route-id="@detail.PdId">
+                    @detail.PdId
+                </a>
+            </td>
+            <td>@detail.PdName</td>
+            <td class="text-end">@detail.CdtlPrice.Value.ToString("#,###.##")</td>
+            <td class="text-center">@detail.CdtlQty</td>
+            <td class="text-end">@detail.CdtlMoney.Value.ToString("#,###.##")</td>
+            <td class="text-center">
+                <a asp-controller="Cart" asp-action="DeleteDtl"
+                   asp-route-pdid="@detail.PdId" asp-route-cartid="@detail.CartId"
+                   onclick="return confirm('ยืนยัดลบสินค้าที่เลือก')">
+                    <i class="bi-x-lg text-danger"></i>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+

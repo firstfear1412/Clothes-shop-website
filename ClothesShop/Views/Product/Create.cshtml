@@ -1,0 +1,68 @@
+﻿@model ClothesShop.Models.Product
+
+@{
+    ViewData["Title"] = "บันทึกใหม่";
+}
+@if(ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+<h1>บันทึกใหม่</h1>
+
+<h4>สินค้า</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PdId" class="control-label"></label>
+                <input asp-for="PdId" class="form-control" />
+                <span asp-validation-for="PdId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdName" class="control-label"></label>
+                <input asp-for="PdName" class="form-control" />
+                <span asp-validation-for="PdName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdtId" class="control-label"></label>
+                <!--<input asp-for="PdtId" class="form-control" />-->
+                <!-- asp-for == name in general html -->
+                <select asp-for="PdtId" class="form-select" asp-items="ViewBag.pdt"> 
+                    <!-- ไม่ต้องใช้ option แล้วเพราะดึงมาจาก asp item -->
+                </select>
+                <span asp-validation-for="PdtId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdPrice" class="control-label"></label>
+                <input asp-for="PdPrice" class="form-control" />
+                <span asp-validation-for="PdPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdCost" class="control-label"></label>
+                <input asp-for="PdCost" class="form-control" />
+                <span asp-validation-for="PdCost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdStk" class="control-label"></label>
+                <input asp-for="PdStk" class="form-control" />
+                <span asp-validation-for="PdStk" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="บันทึก" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">ย้อนกลับ</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

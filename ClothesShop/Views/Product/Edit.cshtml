@@ -1,0 +1,70 @@
+﻿@model ClothesShop.Models.Product
+
+@{
+    ViewData["Title"] = "Edit";
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+<h1>Edit</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PdId" />
+            <div class="form-group">
+                <label asp-for="PdName" class="control-label"></label>
+                <input asp-for="PdName" class="form-control" />
+                <span asp-validation-for="PdName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdtId" class="control-label"></label>
+                @* <input asp-for="PdtId" class="form-control" /> *@
+                <select asp-for="PdtId" class="form-select" asp-items="ViewBag.Pdt"></select>
+                <span asp-validation-for="PdtId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdPrice" class="control-label"></label>
+                <input asp-for="PdPrice" class="form-control" />
+                <span asp-validation-for="PdPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdCost" class="control-label"></label>
+                <input asp-for="PdCost" class="form-control" />
+                <span asp-validation-for="PdCost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdStk" class="control-label"></label>
+                <input asp-for="PdStk" class="form-control" />
+                <span asp-validation-for="PdStk" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdLastBuy" class="control-label"></label>
+                <input asp-for="PdLastBuy" class="form-control" />
+                <span asp-validation-for="PdLastBuy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdLastSale" class="control-label"></label>
+                <input asp-for="PdLastSale" class="form-control" />
+                <span asp-validation-for="PdLastSale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

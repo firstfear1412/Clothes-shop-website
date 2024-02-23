@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ClothesShop.ViewModels.PdVM>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+@{
+    var stext = ViewBag.stext;
+}
+
+<h1>KU Shop</h1>
+<form asp-controller="Home" asp-action="Shop">
+    @* <form asp-controller="Product" asp-action="Index"> *@
+    <div class="row">
+@*         <div class="col">
+            <a class="btn btn-primary" asp-action="Create">เพิ่ม</a>
+        </div> *@
+        <div class="input-group">
+            <span class="input-group-text">ค้นหา</span>
+            <input type="search" class="form-control" id="autocompleteTextBox" name="stext" placeholder="Type a name here..." />
+            <button type="submit" class="btn btn-secondary">submit</button>
+
+        </div>
+    </div>
+
+</form>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            @{
+                var pdimg = "/imgpd/" + item.PdId + ".png";
+            }
+            @*            <img src="@pdimg" class="card-img-top" width="200" alt="..."/> *@
+
+            <div class="card px-2" style="width: 18rem;">
+                <img src="@pdimg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">@item.PdName</h5>
+                    <p class="card-subtitle text-muted">สี: @item.ColorName</p>
+                    <p class="card-subtitle text-muted">ขนาด: @item.SizeName</p>
+
+                    <a class="btn btn-btn-link" asp-action="show" asp-controller="Product" asp-route-id="@item.PdId">รายละเอียด</a>
+                    <a asp-action="AddDtl" asp-controller="Cart" asp-route-pdid="@item.PdId" class="text-danger float-end"><i class="bi bi-cart-plus-fill"></i></a>
+                </div>
+            </div>
+
+
+        </div>
+    }
+</div>

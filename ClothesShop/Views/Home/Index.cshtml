@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+<div>
+    @if(TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    @if(HttpContextAccessor.HttpContext.Session.GetString("CusId") == null)
+{
+    <div class="text-center">
+        <div class="display-4">
+            KuShop
+        </div>
+        <form asp-controller="Home" asp-action="login" method="post">
+            <div class="row text-center justify-content-center m-3">
+                @* bootsrap แบ่งเป็น 12 ช่อง/grid *@
+                <div class="col-lg-4">
+                    <div class="input-group">
+                            <div class="input-group-text"><i class="bi bi-person-circle"></i></div>
+                        <input type="text" name="userName" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center justify-content-center m-3">
+                @* bootsrap แบ่งเป็น 12 ช่อง/grid *@
+                <div class="col-lg-4">
+                    <div class="input-group">
+                            <div class="input-group-text"><i class="bi bi-unlock-fill"></i></div>
+                            <input type="password" name="userPass" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center justify-content-center m-3">
+                <div class="col-lg-2">
+                    <button type="button" class="btn btn-link">สมัครใหม่</button>
+                </div>
+                <div class="col-lg-2">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+else{
+    <div class="display-4">Welcome @HttpContextAccessor.HttpContext.Session.GetString("CusName")</div>
+}
+</div>

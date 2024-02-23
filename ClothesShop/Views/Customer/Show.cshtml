@@ -1,0 +1,85 @@
+﻿@model ClothesShop.Models.Customer
+
+@{
+    ViewData["Title"] = "Show";
+}
+
+<h1>Show</h1>
+
+<div>
+    <h4>Customer</h4>
+    <hr />
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <img src="@ViewBag.ImgFile" width="250" class="shadow" />
+            <div class="row mt-2">
+                <div class="col">
+                    <a class="btn btn-sm btn-danger" onclick="return confirm('ยืนยันการลบรูป')" asp-action="ImgDelete" asp-route-id="@Model.CusId">
+                        <i class="bg-x-lg "></i>
+                        ลบรูปภาพ
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CusName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CusName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CusLogin)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CusLogin)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CusPass)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CusPass)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CusEmail)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CusEmail)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CusAdd)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CusAdd)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.StartDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.LastLogin)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.LastLogin)
+                </dd>
+            </dl>
+            <div class="row">
+                <div class="col">
+                    <form method="post" enctype="multipart/form-data" asp-action="ImgUpload">
+                        <input type="hidden" name="theid" value="@Model.CusId"/>
+                        <input type="file" name="imgfiles" accept="image/jpeg" required/>
+                        <input class="btn btn-success" type="submit" value="upload"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.CusId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

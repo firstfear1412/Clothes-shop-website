@@ -1,0 +1,153 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KuShop</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/KuShop.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @* <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" /> *@
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">KuShop</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="About" asp-action="Index">About</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="About" asp-action="Dev">Deve</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Shop">Shop</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="text-end pe-3">
+                    @*   เเสดงตระกร้าสินค้า *@
+                    @if (@HttpContextAccessor.HttpContext.Session.GetString("CartId") != null)
+                    {
+                        var CartId = HttpContextAccessor.HttpContext.Session.GetString("CartId");
+                        var CartMoney = HttpContextAccessor.HttpContext.Session.GetString("CartMoney");
+                        var CartQty = HttpContextAccessor.HttpContext.Session.GetString("CartQty");
+
+                        <a class="btn btn-success opacity-50 text-white mx-2" asp-controller="Cart" asp-action="Show" asp-route-cartid="@CartId">
+                           
+                            @CartId [@CartMoney][@CartQty]
+                        </a>
+                    }
+
+                    @*   เเสดงข้อมูล login *@
+                    @if (@HttpContextAccessor.HttpContext.Session.GetString("CusId") != null)
+                    {
+                        var CusId = HttpContextAccessor.HttpContext.Session.GetString("CusId");
+                        var CusName = HttpContextAccessor.HttpContext.Session.GetString("CusName");
+
+                        <a class="btn btn-success text-white ms-2" asp-controller="Customer" asp-action="Show" asp-route-id="@CusId">
+                            
+                           
+                            <i class="bi bi-person"> @CusName</i>
+                            
+                        </a>
+
+
+                        <a class="p-2 ms-2 btn-danger text-white" asp-controller="Home" asp-action="Logout" onclick="return confirm('ออกจากระบบ')">
+                            
+                           
+                            <i class="bi bi-box-arrow-right"></i>
+                            &nbsp;&nbsp;Logout
+                        </a>
+
+                    }
+                    @if (@HttpContextAccessor.HttpContext.Session.GetString("StfId") != null)
+                    {
+                        var StfId = HttpContextAccessor.HttpContext.Session.GetString("StfId");
+                        var StfName = HttpContextAccessor.HttpContext.Session.GetString("StfName");
+                        <h2>Hello Admin</h2>
+                        <a class="btn btn-success text-white ms-2" asp-controller="Customer" asp-action="Show" asp-route-id="@StfId">
+
+
+                            <i class="bi bi-person">@StfName</i>
+
+                        </a>
+
+
+
+                        <a class="p-2 ms-2 btn-danger text-white" asp-controller="Home" asp-action="Logout" onclick="return confirm('ออกจากระบบ')">
+
+
+                            <i class="bi bi-box-arrow-right"></i>
+                            &nbsp;&nbsp;Logout
+                        </a>
+
+                    }
+
+
+                </div>
+
+        
+            </div>
+        </nav>
+
+       
+
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2566 - KuShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Load jQuery and jQuery UI -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css" />
+
+
+</body>
+</html>
