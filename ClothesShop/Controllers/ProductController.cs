@@ -4,6 +4,8 @@ using ClothesShop.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
+using System.Security.Cryptography;
+using System.Drawing;
 
 namespace ClothesShop.Controllers
 {
@@ -215,9 +217,7 @@ namespace ClothesShop.Controllers
         }
   
         [HttpGet]
-
         [Route("/api/products")]
-
         public IActionResult GetProducts()
 
         {
@@ -262,6 +262,63 @@ namespace ClothesShop.Controllers
             return Json(pdvm);
 
         }
+
+        public IActionResult show(string id)
+        {
+            if (id == null)
+            {
+                TempData["ErrorMessage"] = "ระบุ id";
+                //return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
+            }
+            //ค้นหา Record ของ Product.pdId จาก id ที่ส่งมา
+            var obj = _db.Products.Find(id);
+            if (obj == null)
+            {
+                TempData["ErrorMessage"] = "ไม่พบข้อมูล";
+                //return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
+            }
+
+            //เพื่อให้ สามารถ แก้ไข ประเภทสินค้า และ size ผ่าน drop-down List ได้ โดยไม่ต้องป้อนเป็น primary key ของประเภทนั้นๆ
+            ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName");
+            string[] parts = id.Split('-');
+            string PrefixId = parts[0] + "-" + parts[1];
+            //var sizes = from s in _db.Sizes
+            //            join p in _db.Products on s.SizeId equals p.SizeId
+            //            where p.PdId.StartsWith(PrefixId)
+            //            select s;
+            var sizes = from p in _db.Products
+                        join size in _db.Sizes on p.SizeId equals size.SizeId into join_p_size
+                        from p_size in join_p_size.DefaultIfEmpty()
+
+                        join color in _db.Colors on p.ColorId equals color.ColorId into join_p_color
+                        from p_color in join_p_color.DefaultIfEmpty()
+
+                        where p.PdId.StartsWith(PrefixId)
+                        select new DtlsVM
+
+                        {
+
+                            PdId = p.PdId,  //รหัวสินค้า
+                            ColorId = p.ColorId, //สี
+                            ColorName = p_color.ColorName,
+                            PdName = p.PdName,
+                            PdPrice = p.PdPrice,
+                            PdStk = p.PdStk,
+                            SizeId = p_size.SizeId,
+                            SizeName = p_size.SizeName, //ขนาด
+
+
+                        };
+
+            //select new { s.SizeId, s.SizeName };
+            //ViewData["PdSize"] = new SelectList(sizes, "SizeId", "SizeName");
+            var items = sizes.ToList(); // แปลงข้อมูลที่ได้จาก LINQ query เป็น List<DtlsVM>
+            ViewData["item"] = items;
+            return View(obj);
+        }
+
 
 
 

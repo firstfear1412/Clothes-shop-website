@@ -1,17 +1,27 @@
 ﻿@model IEnumerable<ClothesShop.ViewModels.PdVM>
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
+    ViewData["Title"] = "Home Page";
 }
-
+@*
 @if (ViewBag.ErrorMessage != null)
 {
     <div class="alert alert-danger" role="alert">
         @ViewBag.ErrorMessage;
     </div>
 }
-
+*@
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["SuccessMessage"]
+    </div>
+}
 @{
     var stext = ViewBag.stext;
 }
@@ -32,24 +42,51 @@
     </div>
 
 </form>
-<div class="row">
-    @foreach (var item in Model)
-    {
-        <div class="col-lg-3 col-md-6 col-sm-12">
-            @{
-                var pdimg = "/imgpd/" + item.PdId + ".png";
-            }
-            @*            <img src="@pdimg" class="card-img-top" width="200" alt="..."/> *@
+<div class="row mt-3">
+    @{
+        // Materialize the Model into a list
+        var modelList = Model.ToList();
+        // store id was displayed
+        HashSet<string> displayedIds = new HashSet<string>(); 
+    }
 
+    @foreach (var item in modelList)
+    {
+        
+                var pdimg = "/imgpd/" + item.PdId + ".png";
+                string[] parts = item.PdId.ToString().Split('-');
+                string id = parts[0] + parts[1];
+                // For check each Id was stored or not
+                if (!displayedIds.Contains(id))
+                {
+                    displayedIds.Add(id);
+                }
+                else
+                {
+                    continue;
+                }
+
+                List<string> size = new List<string>();
+                // Iterate over the list in memory
+                foreach (var otherItem in modelList)
+                {
+                    string[] otherParts = otherItem.PdId.ToString().Split('-');
+                    string otherId = otherParts[0] + otherParts[1];
+                    if (otherId == id)
+                    {
+                        size.Add(otherItem.SizeName);
+                    }
+                }
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
             <div class="card px-2" style="width: 18rem;">
-                <img src="@pdimg" class="card-img-top">
+                <img src="@pdimg" class="card-img-top img-fluid object-fit-cover" style="height:350px" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">@item.PdName</h5>
                     <p class="card-subtitle text-muted">สี: @item.ColorName</p>
-                    <p class="card-subtitle text-muted">ขนาด: @item.SizeName</p>
+                    <p class="card-subtitle text-muted">ขนาด: @string.Join(",",size.Distinct())</p>
 
                     <a class="btn btn-btn-link" asp-action="show" asp-controller="Product" asp-route-id="@item.PdId">รายละเอียด</a>
-                    <a asp-action="AddDtl" asp-controller="Cart" asp-route-pdid="@item.PdId" class="text-danger float-end"><i class="bi bi-cart-plus-fill"></i></a>
+                    <a asp-action="AddDtl" asp-controller="Cart" asp-route-pdid="@item.PdId" asp-route-qty="1" class="text-danger float-end"><i class="bi bi-cart-plus-fill"></i></a>
                 </div>
             </div>
 

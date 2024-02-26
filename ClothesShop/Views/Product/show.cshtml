@@ -1,0 +1,112 @@
+﻿@model ClothesShop.Models.Product;
+@{
+    ViewData["Title"] = "show";
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+<h1>รายละเอียดสินค้า</h1>
+@{
+    var PdId = Html.ValueFor(model => model.PdId);
+    var maxStk = Html.ValueFor(model => model.PdStk);
+    var pdimg = "/imgpd/" + PdId + ".png";
+    double PdStk = 0;
+}
+
+<div id="size" class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="@pdimg" alt="YUEDPAO BEACH SAND T-Shirt" class="img-fluid">
+            @* <span class="badge bg-danger">-33%</span> *@
+        </div>
+        <div class="col-md-6">
+            <h1>@Html.DisplayFor(model => model.PdName)</h1>
+            @* <p>Brand: YUEDPAO</p> *@
+            <p>รายละเอียด : @Html.DisplayFor(model => model.PdDtls)</p>
+            <p>Price: @Html.DisplayFor(model => model.PdPrice)฿</p>
+            <form asp-action="AddDtl" asp-controller="Cart">
+            <div class="radio-tile-group">
+                @foreach (var item in ViewBag.item)
+                {
+                    <div class="input-container">
+                        <input type="radio" class="radio-button" id="@item.SizeName" value="@item.PdId" name="radio" @(Model.SizeId.ToString() == @item.PdId ? "checked" : "")>
+                        <div class="radio-tile">
+                            <label for="@item.SizeName" class="radio-tile-label">@item.SizeName</label>
+                        </div>
+                        @*สำหรับกำหนดให้ radio แรก ถูกเลือกเป็น default*@
+                        @if (PdId == @item.PdId)
+                        {
+                            <script>
+                                    var radios = document.querySelectorAll('.radio-button');
+                                    radios[0].checked = true;
+                            </script>
+                        }
+                        </div>
+                        PdStk = @item.PdStk;
+                    }
+            </div>
+                @{
+                    // Convert ViewBag.item to a JSON string
+                    string itemJson = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.item);
+                }
+
+                <!-- Your HTML code -->
+
+                <script>
+                    // Get all radio buttons
+                    var radioButtons = document.querySelectorAll('.radio-button');
+
+                    // Store ViewBag.item in a JavaScript variable
+                    var items = @Html.Raw(itemJson); // Use Html.Raw to output JSON as raw JavaScript object
+
+                    // Add event listener to each radio button
+                    radioButtons.forEach(function (radioButton) {
+                        radioButton.addEventListener('change', function () {
+                            // Update stock information when a radio button is selected
+                            var selectedSize = this.value;
+                            var selectedItem;
+                            for (var i = 0; i < items.length; i++) {
+                                if (items[i].PdId == selectedSize) {
+                                    selectedItem = items[i];
+                                    break;
+                                }
+                            }
+                            if (selectedItem) {
+                                document.getElementById('stock-quantity').textContent = selectedItem.PdStk;
+                                var max = document.getElementById('quantity').max = selectedItem.PdStk;
+                                var cur = document.getElementById('quantity').value;
+                                if (cur > max) {
+                                    document.getElementById('quantity').value = max;
+                                }
+                            }
+                        });
+                    });
+                </script>
+
+                <div id="stock-info">สินค้าคงเหลือ: <span id="stock-quantity">@maxStk</span></div>
+            
+            <input type="hidden" id="selectedSize" name="pdid" value="">
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="quantity" min="1" value="1" name="qty" max="@maxStk">
+            </div>
+            <div class="form-group">
+                <input type="submit" onclick="addToCart()" value="เพิ่มไปยังตะกร้า" class="btn btn-primary" />
+            </div>
+            </form>
+            <script>
+                function addToCart() {
+                    var selectedSize = document.querySelector('input[name="radio"]:checked').value;
+                    document.getElementById("selectedSize").value = selectedSize;
+                    // document.getElementById("addToCartForm").submit();
+                }
+            </script>
+
+            @* <button class="btn btn-primary">Add to Cart</button> *@
+        </div>
+    </div>
+</div>

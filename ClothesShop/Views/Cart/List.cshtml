@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ClothesShop.Models.Cart>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@{
+	var CusName = HttpContextAccessor.HttpContext.Session.GetString("CusName");
+}
+<div class="container">
+    <h2 class="text-success">ประวัติการซื้อ @CusName</h2>
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>#</th>
+            <th>เลขที่</th>
+            <th>วันที่</th>
+            <th class="text-end">จำนวนสินค้า</th>
+            <th class="text-end">ยอดเงิน</th>
+            <th class="text-center">ยืนยันสั้่งซื้อ</th>
+            <th class="text-center">ชำระเงิน</th>
+            <th class="text-center">ส่งของ</th>
+        </tr>
+        @{
+            var i = 0;
+        }
+        @foreach(var item in Model)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>
+                    <a asp-action="Show" asp-route-cartid="@item.CartId">@item.CartId</a>
+                </td>
+                <td>@item.CartDate</td>
+                <td class="text-end">@item.CartQty</td>
+                <td class="text-end">@item.CartMoney</td>
+                <td class="text-center">@item.CartCf</td>
+                <td class="text-center">@item.CartPay</td>
+                <td class="text-center">@item.CartSend</td>
+            </tr>
+        }
+    </table>
+</div>

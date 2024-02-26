@@ -1,4 +1,8 @@
-﻿@using ClothesShop.ViewModels;
+﻿
+
+
+
+.@using ClothesShop.ViewModels;
 @model dynamic
 @using System.Globalization;
 
@@ -38,8 +42,10 @@
 <table class="table table-hover mt-3 ">
     <tr class="bg-light">
         <td></td>
-        <td>สินค้า</td>
-        <td></td>
+        <td>รหัสสินค้า</td>
+        <td>ชื่อสินค้า</td>
+        <td>สี</td>
+        <td>ขนาด</td>
         <td class="text-end">ราคาต่อหน่วย</td>
         <td class="text-center">จำนวน</td>
         <td class="text-end">เป็นเงิน</td>
@@ -59,6 +65,8 @@
                 </a>
             </td>
             <td>@detail.PdName</td>
+            <td>@detail.ColorName</td>
+            <td>@detail.SizeName</td>
             <td class="text-end">@detail.CdtlPrice.Value.ToString("#,###.##")</td>
             <td class="text-center">@detail.CdtlQty</td>
             <td class="text-end">@detail.CdtlMoney.Value.ToString("#,###.##")</td>

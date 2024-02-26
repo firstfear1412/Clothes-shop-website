@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
 using ClothesShop.ViewModels;
+using Microsoft.AspNetCore.Http;
 namespace ClothesShop.Controllers
 {
     public class CartController : Controller
@@ -17,7 +18,7 @@ namespace ClothesShop.Controllers
         {
             return View();
         }
-        public IActionResult AddDtl(string pdid)
+        public IActionResult AddDtl(string pdid,int qty)
         {
             //ตรวจสอบ Login??
             if (HttpContext.Session.GetString("CusId") == null)
@@ -34,7 +35,7 @@ namespace ClothesShop.Controllers
             //ตรวจสอบว่ามีตะกร้า?? ถ้าไม่มีก็สร้างตะกร้า
             if (HttpContext.Session.GetString("CartId") == null)
             {
-                return RedirectToAction("Add", new { pdid = pdid }); //ยังไม่ได้สร้าง ต้องไปสร้างก่อน
+                return RedirectToAction("Add", new { pdid = pdid ,qty = qty}); //ยังไม่ได้สร้าง ต้องไปสร้างก่อน
             }
             //ถ้ามีแล้วบันทึกข้อมูลสินค้าลงตะกร้า
             //หาข้อมูลสินค้า - ราคาขาย
@@ -49,16 +50,17 @@ namespace ClothesShop.Controllers
                 CartDtl obj = new CartDtl();
                 obj.CartId = CartId;
                 obj.PdId = pdid;
-                obj.CdtlQty = 1;
+                obj.CdtlQty = qty;
+                //obj.CdtlQty = 1;
                 obj.CdtlPrice = pd.PdPrice;
-                obj.CdtlMoney = pd.PdPrice * 1;
+                obj.CdtlMoney = pd.PdPrice * qty;
                 _db.Entry(obj).State = EntityState.Added;
             }
             else
             {
                 foreach (var obj in cdtl)
                 {
-                    obj.CdtlQty = obj.CdtlQty + 1;
+                    obj.CdtlQty = obj.CdtlQty + qty;
                     obj.CdtlMoney = pd.PdPrice * (obj.CdtlQty);
                     _db.Entry(obj).State = EntityState.Modified;
                 }
@@ -81,7 +83,7 @@ namespace ClothesShop.Controllers
             return RedirectToAction("Index", "Home");
 
         }
-        public IActionResult Add(string pdid)
+        public IActionResult Add(string pdid, int qty)
         {
             //Gen CartId
             string theId;
@@ -124,7 +126,7 @@ namespace ClothesShop.Controllers
                 HttpContext.Session.SetString("CartQty", "0");
                 HttpContext.Session.SetString("CartMoney", "0");
 
-                return RedirectToAction("AddDtl", new { pdid = pdid });
+                return RedirectToAction("AddDtl", new { pdid = pdid , qty = qty});
             }catch (Exception ex) {
                 TempData["ErrorMessage"] = "การบันทึกผิดพลาด";
                 return RedirectToAction("Index", "Home");
@@ -150,15 +152,28 @@ namespace ClothesShop.Controllers
 
             //Detail เลือกข้อมูลของตะกร้า+สร้าง ViewModel CtdVM แสดงชื่อสินค้า
             var cartdtl = from ctd in _db.CartDtls
+
                           join p in _db.Products on ctd.PdId equals p.PdId
                               into join_ctd_p
                           from ctd_p in join_ctd_p.DefaultIfEmpty()
+
+
+                          join color in _db.Colors on ctd_p.ColorId equals color.ColorId
+                              into join_ctd_color
+                          from ctd_color in join_ctd_color.DefaultIfEmpty()
+
+                          join size in _db.Sizes on ctd_p.SizeId equals size.SizeId
+                              into join_ctd_size
+                          from ctd_size in join_ctd_size.DefaultIfEmpty()
+
                           where ctd.CartId == cartid
                           select new CtdVM
                           {
                               CartId = ctd.CartId,
                               PdId = ctd.PdId,
                               PdName = ctd_p.PdName,
+                              ColorName = ctd_color.ColorName,
+                              SizeName = ctd_size.SizeName,
                               CdtlMoney = ctd.CdtlMoney,
                               CdtlPrice = ctd.CdtlPrice,
                               CdtlQty = ctd.CdtlQty
@@ -172,6 +187,134 @@ namespace ClothesShop.Controllers
             //ส่ง Dynamic Model ไปที่ View
             return View(DyModel);
 
+        }
+        public IActionResult Check()
+        {
+            string cusid = HttpContext.Session.GetString("CusId");
+            var cart = from ct in _db.Carts.Take(1)
+                       where ct.CusId.Equals(cusid) && ct.CartCf != "Y"
+                       select ct;
+            int rowCount = cart.Count();
+            if(rowCount > 0)
+            {
+                Cart obj = new Cart();
+                foreach(var item in cart)
+                {
+                    obj = item;
+                }
+                HttpContext.Session.SetString("CartId", obj.CartId);
+                HttpContext.Session.SetString("CartQty", obj.CartQty.ToString());
+                HttpContext.Session.SetString("CartMoney",obj.CartMoney.ToString());
+            }
+            return RedirectToAction("Shop","Home");
+
+        }
+        public IActionResult Delete(string cartid) {
+            var detail = from ctd in _db.CartDtls
+                         where ctd.CartId.Equals(cartid)
+                         select ctd;
+            foreach(var item in detail)
+            {
+                _db.CartDtls.Remove(item);
+            }
+            _db.SaveChanges();
+            //ลบส่วน master
+            var master = _db.Carts.Find(cartid);
+            if(master == null)
+            {
+                TempData["ErrorMessage"] = "ไม่พบตะกร้า";
+                return RedirectToAction("Show","Cart",new {cartid = cartid});
+            }
+            _db.Carts.Remove(master);
+            _db.SaveChanges();
+
+            HttpContext.Session.Remove("CartId");
+            HttpContext.Session.Remove("CartQty");
+            HttpContext.Session.Remove("CartMoney");
+
+            TempData["SuccessMessage"] = "ยกเลิกคำสั่งซื้อแล้ว";
+            return RedirectToAction("Shop", "Home");
+        }
+        public IActionResult DeleteDtl(string pdid,string cartid)
+        {
+            var obj = _db.CartDtls.Find(cartid, pdid);
+            if(obj == null)
+            {
+                TempData["ErrorMessage"] = "ไม่พบข้อมูล";
+            }
+            _db.CartDtls.Remove(obj);
+            _db.SaveChanges();
+
+            var cartmoney = _db.CartDtls.Where(a => a.CartId == cartid).Sum(a => a.CdtlMoney);
+            var cartqty = _db.CartDtls.Where(a => a.CartId == cartid).Sum(a => a.CdtlQty);
+            if(cartqty == 0)
+            {
+                var master = _db.Carts.Find(cartid);
+                _db.Carts.Remove(master);
+                _db.SaveChanges();
+
+                HttpContext.Session.Remove("CartId");
+                HttpContext.Session.Remove("CartQty");
+                HttpContext.Session.Remove("CartMoney");
+
+                TempData["SuccessMessage"] = "ยกเลิกคำสั่งซื้อแล้ว";
+                return RedirectToAction("Shop", "Home");
+
+            }
+            else
+            {
+                var cart = _db.Carts.Find(cartid);
+                cart.CartQty = cartqty;
+                cart.CartMoney = cartmoney;
+                _db.SaveChanges();
+
+                HttpContext.Session.SetString("CartMoney", cartmoney.ToString());
+                HttpContext.Session.SetString("CartQty", cartqty.ToString());
+                return RedirectToAction("Show","Cart",new {cartid = cartid});
+            }
+        }
+        public IActionResult Confirm(string cartid)
+        {
+            var cartdtl = from ctd in _db.CartDtls
+                          where ctd.CartId.Equals(cartid)
+                          select ctd;
+            int rowCount = cartdtl.Count();
+            if(rowCount == 0)
+            {
+                TempData["ErrorMessage"] = "การยืนยันผิดพลาด";
+                return RedirectToAction("show", "Cart", new { cartid = cartid });
+            }
+            foreach(var detail in cartdtl)
+            {
+                Product pd = _db.Products.Find(detail.PdId);
+                pd.PdStk = pd.PdStk - detail.CdtlQty;
+                pd.PdLastSale = DateOnly.FromDateTime(DateTime.Now.Date);
+                _db.Entry(pd).State = EntityState.Modified;
+
+            }
+            _db.SaveChanges();
+
+            //update cart for confirm
+            var master = _db.Carts.Find(cartid);
+            master.CartCf = "Y";
+            _db.Entry(master).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            //del session cart
+            HttpContext.Session.Remove("CartId");
+            HttpContext.Session.Remove("CartQty");
+            HttpContext.Session.Remove("CartMoney");
+
+            TempData["SuccessMessage"] = "ยืนยันคำสั่งซื้อแล้ว";
+            return RedirectToAction("Shop", "Home");
+        }
+        public IActionResult List(string cusid)
+        {
+            var cart = from c in _db.Carts
+                       where c.CusId.Equals(cusid)
+                       orderby c.CartId descending
+                       select c;
+            return View(cart);
         }
     }
 }

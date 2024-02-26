@@ -7,6 +7,8 @@
         public string PdId { get; set; } = null!;
         
         public string PdName { get; set; }
+        public string ColorName { get; set; }
+        public string SizeName { get; set; }
 
         public double? CdtlQty { get; set; }
 

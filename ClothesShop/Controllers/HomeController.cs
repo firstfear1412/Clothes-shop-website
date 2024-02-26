@@ -85,8 +85,9 @@ namespace ClothesShop.Controllers
 
                 }
                 _db.SaveChanges();
-
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                // *** ทำการตรวจสอบตะกร้าเดิม ที่ยังไม่ได้ยืนยัน ***
+                return RedirectToAction("Check", "Cart");
             }
             else if (stf.ToList().Count() != 0)
             {
@@ -169,7 +170,9 @@ namespace ClothesShop.Controllers
 
         public IActionResult Shop()
         {
-            var pdvm = from p in _db.Products.Take(4)
+            var pdvm = from p in _db.Products
+                       //from p in _db.Products.Take(4)
+
 
                        join pt in _db.ProductTypes on p.PdtId equals pt.PdtId into join_p_pt
 
@@ -212,6 +215,154 @@ namespace ClothesShop.Controllers
             ViewBag.ErrorMessage = TempData["ErrorMessage"];
             return View(pdvm);
         }
-        
+        public IActionResult men()
+        {
+            var pdvm = from p in _db.Products
+                           //from p in _db.Products.Take(4)
+
+
+                       join pt in _db.ProductTypes on p.PdtId equals pt.PdtId into join_p_pt
+
+                       from p_pt in join_p_pt.DefaultIfEmpty()
+
+                       join color in _db.Colors on p.ColorId equals color.ColorId into join_p_color
+                       from p_color in join_p_color.DefaultIfEmpty()
+
+                       join size in _db.Sizes on p.SizeId equals size.SizeId into join_p_size
+                       from p_size in join_p_size.DefaultIfEmpty()
+
+                       join target in _db.Targets on p.TargetId equals target.TargetId into join_p_target
+                       from p_target in join_p_target.DefaultIfEmpty()
+
+                       join status in _db.Statuses on p.StatusId equals status.StatusId into join_p_status
+                       from p_status in join_p_status.DefaultIfEmpty()
+
+                       where p_target.TargetName.Equals("ผู้ชาย")
+
+
+                       select new PdVM
+
+                       {
+
+                           PdId = p.PdId,  //รหัวสินค้า
+                           ColorName = p_color.ColorName, //สี
+                           SizeName = p_size.SizeName, //ขนาด
+                           TargetName = p_target.TargetName, //กลุ่มลูกค้า ชาย หญิง เด็ก
+                           PdName = p.PdName, //ชื่อสินค้า
+                           PdtName = p_pt.PdtName, //ประเภทสินค้า 
+                           PdPrice = p.PdPrice, //ราคา
+                           PdCost = p.PdCost, //ต้นทุน
+                           PdStk = p.PdStk, //คงเหลือ
+                           StatusName = p_status.StatusName, //สถาานะ
+
+                       };
+
+
+
+            if (pdvm == null) return NotFound();
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+            return View(pdvm);
+        }
+
+        public IActionResult women()
+        {
+            var pdvm = from p in _db.Products
+                           //from p in _db.Products.Take(4)
+
+
+                       join pt in _db.ProductTypes on p.PdtId equals pt.PdtId into join_p_pt
+
+                       from p_pt in join_p_pt.DefaultIfEmpty()
+
+                       join color in _db.Colors on p.ColorId equals color.ColorId into join_p_color
+                       from p_color in join_p_color.DefaultIfEmpty()
+
+                       join size in _db.Sizes on p.SizeId equals size.SizeId into join_p_size
+                       from p_size in join_p_size.DefaultIfEmpty()
+
+                       join target in _db.Targets on p.TargetId equals target.TargetId into join_p_target
+                       from p_target in join_p_target.DefaultIfEmpty()
+
+                       join status in _db.Statuses on p.StatusId equals status.StatusId into join_p_status
+                       from p_status in join_p_status.DefaultIfEmpty()
+
+                       where p_target.TargetName.Equals("ผู้หญิง")
+
+
+                       select new PdVM
+
+                       {
+
+                           PdId = p.PdId,  //รหัวสินค้า
+                           ColorName = p_color.ColorName, //สี
+                           SizeName = p_size.SizeName, //ขนาด
+                           TargetName = p_target.TargetName, //กลุ่มลูกค้า ชาย หญิง เด็ก
+                           PdName = p.PdName, //ชื่อสินค้า
+                           PdtName = p_pt.PdtName, //ประเภทสินค้า 
+                           PdPrice = p.PdPrice, //ราคา
+                           PdCost = p.PdCost, //ต้นทุน
+                           PdStk = p.PdStk, //คงเหลือ
+                           StatusName = p_status.StatusName, //สถาานะ
+
+                       };
+
+
+
+            if (pdvm == null) return NotFound();
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+            return View(pdvm);
+        }
+
+        public IActionResult kids()
+        {
+            var pdvm = from p in _db.Products
+                           //from p in _db.Products.Take(4)
+
+
+                       join pt in _db.ProductTypes on p.PdtId equals pt.PdtId into join_p_pt
+
+                       from p_pt in join_p_pt.DefaultIfEmpty()
+
+                       join color in _db.Colors on p.ColorId equals color.ColorId into join_p_color
+                       from p_color in join_p_color.DefaultIfEmpty()
+
+                       join size in _db.Sizes on p.SizeId equals size.SizeId into join_p_size
+                       from p_size in join_p_size.DefaultIfEmpty()
+
+                       join target in _db.Targets on p.TargetId equals target.TargetId into join_p_target
+                       from p_target in join_p_target.DefaultIfEmpty()
+
+                       join status in _db.Statuses on p.StatusId equals status.StatusId into join_p_status
+                       from p_status in join_p_status.DefaultIfEmpty()
+
+                       where p_target.TargetName.Equals("เด็ก")
+
+
+                       select new PdVM
+
+                       {
+
+                           PdId = p.PdId,  //รหัวสินค้า
+                           ColorName = p_color.ColorName, //สี
+                           SizeName = p_size.SizeName, //ขนาด
+                           TargetName = p_target.TargetName, //กลุ่มลูกค้า ชาย หญิง เด็ก
+                           PdName = p.PdName, //ชื่อสินค้า
+                           PdtName = p_pt.PdtName, //ประเภทสินค้า 
+                           PdPrice = p.PdPrice, //ราคา
+                           PdCost = p.PdCost, //ต้นทุน
+                           PdStk = p.PdStk, //คงเหลือ
+                           StatusName = p_status.StatusName, //สถาานะ
+
+                       };
+
+
+
+            if (pdvm == null) return NotFound();
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+            return View(pdvm);
+        }
+
     }
+    
+
 }

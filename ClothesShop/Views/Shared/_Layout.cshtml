@@ -6,12 +6,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - KuShop</title>
+    <title>@ViewData["Title"] - Clothes Shop</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KuShop.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/styles.css" />
     @* <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" /> *@
 
 </head>
@@ -19,7 +20,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">KuShop</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ClothesShop</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -29,6 +30,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="men">Men</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="women">Women</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="kids">Kids</a>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
@@ -86,12 +100,14 @@
 
 
                         <a class="p-2 ms-2 btn-danger text-white" asp-controller="Home" asp-action="Logout" onclick="return confirm('ออกจากระบบ')">
-                            
-                           
                             <i class="bi bi-box-arrow-right"></i>
                             &nbsp;&nbsp;Logout
                         </a>
 
+                    }
+                    else
+                    {
+                        <a class="btn btn-success text-white ms-2" asp-controller="home" asp-action="Login">Login</a>
                     }
                     @if (@HttpContextAccessor.HttpContext.Session.GetString("StfId") != null)
                     {
