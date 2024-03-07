@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClothesShop.Models;
 
 public partial class Supplier
 {
+    [Key]
+    [Required(ErrorMessage = "ต้องระบุรหัส")]
+    [Display(Name = "SupId")]
     public string SupId { get; set; } = null!;
 
     public string? SupName { get; set; }

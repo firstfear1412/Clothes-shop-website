@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Drawing;
+using System;
+using System.Linq;
 
 namespace ClothesShop.Controllers
 {
@@ -15,6 +17,7 @@ namespace ClothesShop.Controllers
         public ProductController(ClothingShopContext db) { _db = db; }
         public IActionResult Index()
         {
+            ViewData["currentNav"] = "Product";
             //var pd = from p in _db.Products
             //select p;
             var pdvm = from p in _db.Products
@@ -36,6 +39,9 @@ namespace ClothesShop.Controllers
                        join status in _db.Statuses on p.StatusId equals status.StatusId into join_p_status
                        from p_status in join_p_status.DefaultIfEmpty()
 
+                       join Sup in _db.Suppliers on p.SupId equals Sup.SupId into join_p_Sup
+                       from p_Sup in join_p_Sup.DefaultIfEmpty()
+
 
                            //join b in _db.Brands on p.BrandId equals b.BrandId into join_p_b
                            //from p_b in join_p_b.DefaultIfEmpty()
@@ -53,6 +59,7 @@ namespace ClothesShop.Controllers
                            PdCost = p.PdCost, //ต้นทุน
                            PdStk = p.PdStk, //คงเหลือ
                            StatusName = p_status.StatusName, //สถาานะ
+                           SupName = p_Sup.SupName
                        };
             if (pdvm == null) return NotFound();
             ViewBag.ErrorMessage = TempData["ErrorMessage"];
@@ -85,6 +92,9 @@ namespace ClothesShop.Controllers
                        join status in _db.Statuses on p.StatusId equals status.StatusId into join_p_status
                        from p_status in join_p_status.DefaultIfEmpty()
 
+                       join Sup in _db.Suppliers on p.SupId equals Sup.SupId into join_p_Sup
+                       from p_Sup in join_p_Sup.DefaultIfEmpty()
+
                        where p.PdName.Contains(stext) || 
                             p_pt.PdtName.Contains(stext)
 
@@ -100,6 +110,7 @@ namespace ClothesShop.Controllers
                            PdCost = p.PdCost, //ต้นทุน
                            PdStk = p.PdStk, //คงเหลือ
                            StatusName = p_status.StatusName, //สถาานะ
+                           SupName = p_Sup.SupName
                        };
             if (pdvm == null) return NotFound();
             ViewBag.stext = stext;
@@ -107,41 +118,92 @@ namespace ClothesShop.Controllers
         }
         public IActionResult Create()
         {
-            ViewData["Pdt"] = new SelectList(_db.ProductTypes,"PdtId","PdtName");
-            //ViewData["Brand"] = new SelectList(_db.Brands, "BrandId", "BrandName");
+            ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName");
+            ViewData["Suppliers"] = new SelectList(_db.Suppliers, "SupId", "SupName");
+            ViewData["Size"] = new SelectList(_db.Sizes, "SizeId", "SizeName");
+            ViewData["Color"] = new SelectList(_db.Colors, "ColorId", "ColorName");
+            ViewData["Target"] = new SelectList(_db.Targets, "TargetId", "TargetName");
+            ViewData["Status"] = new SelectList(_db.Statuses, "StatusId", "StatusName");
+
+            //ViewData["currentNavPD_Create"] = "Product/Create";
+            ViewData["currentNav"] = "Product/Create";
+
             return View();
+            //return RedirectToAction("Create");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(IFormFile? formFile, Product obj)
         {
+            ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName");
+            ViewData["Suppliers"] = new SelectList(_db.Suppliers, "SupId", "SupName");
+            ViewData["Size"] = new SelectList(_db.Sizes, "SizeId", "SizeName");
+            ViewData["Color"] = new SelectList(_db.Colors, "ColorId", "ColorName");
+            ViewData["Target"] = new SelectList(_db.Targets, "TargetId", "TargetName");
+            ViewData["Status"] = new SelectList(_db.Statuses, "StatusId", "StatusName");
+
             try
             {
-                if(ModelState.IsValid) { 
+                if (ModelState.IsValid)
+                {
+
                     _db.Products.Add(obj);
                     _db.SaveChanges();
-                    return RedirectToAction("Index");
+                    var theid = obj.PdId;
+
+                    if (formFile != null && formFile.Length > 0)
+                    {
+                        var FileName = theid;
+                        var FileExtension = ".png";
+                        var SaveFileName = FileName + FileExtension;
+                        var SavePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\imgpd");
+                        var SaveFilePath = Path.Combine(SavePath, SaveFileName);
+
+                        using (FileStream fs = System.IO.File.Create(SaveFilePath))
+                        {
+                            formFile.CopyTo(fs);
+                            fs.Flush();
+                        }
+                    }
+                    return RedirectToAction("Edit", new { id = theid });
+
+                    //return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "บันทึกข้อมูลไม่สำเร็จ กรุณาตรวจสอบ";
+                ViewBag.ErrorMessage = ex.Message;
                 /* return เพื่อคืนค่า obj ไปที่ฟอร์ม ที่ user ได้กรอกมา */
                 return View(obj);
             }
+            ViewBag.ErrorMessage = "บันทึกข้อมูลไม่สำเร็จ กรุณาตรวจสอบ";
+            /* return เพื่อคืนค่า obj ไปที่ฟอร์ม ที่ user ได้กรอกมา */
+            return View(obj);
         }
+
+
         public IActionResult Edit(string id)
         {
+
+            ViewData["currentNav"] = "Product";
+
+            ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName");
+            ViewData["Suppliers"] = new SelectList(_db.Suppliers, "SupId", "SupName");
+            ViewData["Size"] = new SelectList(_db.Sizes, "SizeId", "SizeName");
+            ViewData["Color"] = new SelectList(_db.Colors, "ColorId", "ColorName");
+            ViewData["Target"] = new SelectList(_db.Targets, "TargetId", "TargetName");
+            ViewData["Status"] = new SelectList(_db.Statuses, "StatusId", "StatusName");
             //ตรวจสอบว่ามี่การส่ง id หรือไม่
-            if(id== null)
+            if (id == null)
             {
                 TempData["ErrorMessage"] = "ระบุ id";
                 return RedirectToAction("Index");
             }
             //ค้นหา Record ของ Product.pdId จาก id ที่ส่งมา
             var obj = _db.Products.Find(id);
-            if(obj == null)
+            if (obj == null)
             {
                 TempData["ErrorMessage"] = "ไม่พบข้อมูล";
                 return RedirectToAction("Index");
@@ -149,19 +211,66 @@ namespace ClothesShop.Controllers
             //เพื่อให้ สามารถ แก้ไข ประเภทสินค้า และ ยี่ห้อ ผ่าน drop-down List ได้ โดยไม่ต้องป้อนเป็น primary key ของประเภทนั้นๆ
             ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName");
             //ViewData["Brand"] = new SelectList(_db.Brands, "BrandId", "BrandName");
+
+
+            var fileName = id.ToString() + ".png";
+            var imgPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\imgpd");
+            var filePath = Path.Combine(imgPath, fileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                ViewBag.ImgFile = "/imgpd/" + id + ".png";
+            }
+            else
+            {
+                ViewBag.ImgFile = "/imgpd/No_image2.png";
+            }
+
+
             return View(obj);
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product obj)
+        public IActionResult Edit(IFormFile? formFile, Product obj)
         {
+            ViewBag.formFile = formFile;
+            ViewData["formFile"] = formFile;
+            ViewData["currentNav"] = "Product";
+
+            ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName");
+            ViewData["Suppliers"] = new SelectList(_db.Suppliers, "SupId", "SupName");
+            ViewData["Size"] = new SelectList(_db.Sizes, "SizeId", "SizeName");
+            ViewData["Color"] = new SelectList(_db.Colors, "ColorId", "ColorName");
+            ViewData["Target"] = new SelectList(_db.Targets, "TargetId", "TargetName");
+            ViewData["Status"] = new SelectList(_db.Statuses, "StatusId", "StatusName");
+
             try
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
+                    var theid = obj.PdId;
                     _db.Products.Update(obj);
                     _db.SaveChanges();
-                    return RedirectToAction("Index");
+
+                    if (formFile != null && formFile.Length > 0)
+                    {
+                        var FileName = theid;
+                        var FileExtension = ".png";
+                        var SaveFileName = FileName + FileExtension;
+                        var SavePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\imgpd");
+                        var SaveFilePath = Path.Combine(SavePath, SaveFileName);
+
+                        using (FileStream fs = System.IO.File.Create(SaveFilePath))
+                        {
+                            formFile.CopyTo(fs);
+                            fs.Flush();
+                        }
+                    }
+
+                    return RedirectToAction("Edit", new { id = theid });
+
+                    //return RedirectToAction("Index");
 
                 }
             }
@@ -171,29 +280,63 @@ namespace ClothesShop.Controllers
                 return View(obj);
             }
             ViewBag.ErrorMessage = "การแก้ไขผิดพลาด";
-            ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName", obj.PdId);
+            //ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName", obj.PdId);
             //ViewData["Brand"] = new SelectList(_db.Brands, "BrandId", "BrandName", obj.BrandId);
             return View(obj);
         }
+
+
         public IActionResult Delete(string id)
         {
-            if(id == null)
+            ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName");
+            ViewData["Suppliers"] = new SelectList(_db.Suppliers, "SupId", "SupName");
+            ViewData["Size"] = new SelectList(_db.Sizes, "SizeId", "SizeName");
+            ViewData["Color"] = new SelectList(_db.Colors, "ColorId", "ColorName");
+            ViewData["Target"] = new SelectList(_db.Targets, "TargetId", "TargetName");
+            ViewData["Status"] = new SelectList(_db.Statuses, "StatusId", "StatusName");
+
+            ViewData["currentNav"] = "Product";
+
+            if (id == null)
             {
                 TempData["ErrorMessage"] = "โปรดระบุ id";
                 return RedirectToAction("Index");
             }
             var obj = _db.Products.Find(id);
-            if(obj == null)
+            if (obj == null)
             {
                 TempData["ErrorMessage"] = "ไม่พบข้อมูล";
                 return RedirectToAction("Index");
             }
+
+
+
+
+            var fileName = id.ToString() + ".png";
+            var imgPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\imgpd");
+            var filePath = Path.Combine(imgPath, fileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                ViewBag.ImgFile = "/imgpd/" + id + ".png";
+            }
+            else
+            {
+                ViewBag.ImgFile = "/imgpd/No_image2.png";
+            }
+
+
+
+
+
             return View(obj);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(string PdId)
         {
+
+
             try
             {
                 var obj = _db.Products.Find(PdId);
@@ -215,7 +358,9 @@ namespace ClothesShop.Controllers
                 return RedirectToAction("Index");
             }
         }
-  
+
+        //-----------------------------------------
+
         [HttpGet]
         [Route("/api/products")]
         public IActionResult GetProducts()
@@ -283,46 +428,125 @@ namespace ClothesShop.Controllers
             //เพื่อให้ สามารถ แก้ไข ประเภทสินค้า และ size ผ่าน drop-down List ได้ โดยไม่ต้องป้อนเป็น primary key ของประเภทนั้นๆ
             ViewData["Pdt"] = new SelectList(_db.ProductTypes, "PdtId", "PdtName");
             string[] parts = id.Split('-');
-            string PrefixId = parts[0] + "-" + parts[1];
-            //var sizes = from s in _db.Sizes
-            //            join p in _db.Products on s.SizeId equals p.SizeId
-            //            where p.PdId.StartsWith(PrefixId)
-            //            select s;
-            var sizes = from p in _db.Products
-                        join size in _db.Sizes on p.SizeId equals size.SizeId into join_p_size
-                        from p_size in join_p_size.DefaultIfEmpty()
+            //string PrefixId = parts[0] + "-" + parts[1];
+            string PrefixId = parts[0];
 
-                        join color in _db.Colors on p.ColorId equals color.ColorId into join_p_color
-                        from p_color in join_p_color.DefaultIfEmpty()
+			var productFilter = from p in _db.Products
+								join pt in _db.ProductTypes on p.PdtId equals pt.PdtId into join_p_pt
+								from p_pt in join_p_pt.DefaultIfEmpty()
 
-                        where p.PdId.StartsWith(PrefixId)
-                        select new DtlsVM
+								join color in _db.Colors on p.ColorId equals color.ColorId into join_p_color
+								from p_color in join_p_color.DefaultIfEmpty()
 
-                        {
+								join size in _db.Sizes on p.SizeId equals size.SizeId into join_p_size
+								from p_size in join_p_size.DefaultIfEmpty()
 
-                            PdId = p.PdId,  //รหัวสินค้า
-                            ColorId = p.ColorId, //สี
-                            ColorName = p_color.ColorName,
-                            PdName = p.PdName,
-                            PdPrice = p.PdPrice,
-                            PdStk = p.PdStk,
-                            SizeId = p_size.SizeId,
-                            SizeName = p_size.SizeName, //ขนาด
+								join target in _db.Targets on p.TargetId equals target.TargetId into join_p_target
+								from p_target in join_p_target.DefaultIfEmpty()
 
+								join status in _db.Statuses on p.StatusId equals status.StatusId into join_p_status
+								from p_status in join_p_status.DefaultIfEmpty()
+								where p.PdId.StartsWith(PrefixId) 
+                                        //&& p_status.StatusName.Equals("วางจำหน่าย")
+								select new PdFilterVM
+								{
+									PdId = p.PdId,  //รหัวสินค้า
+									ColorId = p.ColorId,
+									ColorName = p_color.ColorName, //สี
+									SizeId = p.SizeId,
+									SizeName = p_size.SizeName, //ขนาด
+									TargetId = p.TargetId,
+									TargetName = p_target.TargetName, //กลุ่มลูกค้า ชาย หญิง เด็ก
+									PdName = p.PdName, //ชื่อสินค้า
+									PdtId = p.PdtId,
+									PdtName = p_pt.PdtName, //ประเภทสินค้า 
+									PdPrice = p.PdPrice, //ราคา
+									PdCost = p.PdCost, //ต้นทุน
+									PdStk = p.PdStk, //คงเหลือ
+									StatusName = p_status.StatusName, //สถาานะ
+								};
 
-                        };
-
-            //select new { s.SizeId, s.SizeName };
-            //ViewData["PdSize"] = new SelectList(sizes, "SizeId", "SizeName");
-            var items = sizes.ToList(); // แปลงข้อมูลที่ได้จาก LINQ query เป็น List<DtlsVM>
+			var items = productFilter.ToList(); // แปลงข้อมูลที่ได้จาก LINQ query เป็น List<DtlsVM>
             ViewData["item"] = items;
-            return View(obj);
+            //ViewData["colors"] = colors.Distinct(); ;
+
+			return View(obj);
+        }
+        [HttpPost]
+        public IActionResult GetFilteredProducts(int[] typeIds, int[] sizeIds, int[] colorIds, string targetName)
+        {
+            var productFilter = from p in _db.Products
+                                join pt in _db.ProductTypes on p.PdtId equals pt.PdtId into join_p_pt
+                                from p_pt in join_p_pt.DefaultIfEmpty()
+
+                                join color in _db.Colors on p.ColorId equals color.ColorId into join_p_color
+                                from p_color in join_p_color.DefaultIfEmpty()
+
+                                join size in _db.Sizes on p.SizeId equals size.SizeId into join_p_size
+                                from p_size in join_p_size.DefaultIfEmpty()
+
+                                join target in _db.Targets on p.TargetId equals target.TargetId into join_p_target
+                                from p_target in join_p_target.DefaultIfEmpty()
+
+                                join status in _db.Statuses on p.StatusId equals status.StatusId into join_p_status
+                                from p_status in join_p_status.DefaultIfEmpty()
+
+								//where (typeIds == null || typeIds.Length == 0 || typeIds.Contains(Convert.ToInt32(p.PdtId)))
+                                where (typeIds == null || typeIds.Length == 0 || (p_pt != null && typeIds.Contains(p_pt.PdtId)))
+									&& (sizeIds == null || sizeIds.Length == 0 || sizeIds.Contains(Convert.ToInt32(p.SizeId)))
+									&& (colorIds == null || colorIds.Length == 0 || colorIds.Contains(Convert.ToInt32(p.ColorId)))
+									&& (targetName == null || targetName.Length == 0 || targetName.Contains(p_target.TargetName))
+									&& p_status.StatusName.Equals("วางจำหน่าย")
+								select new PdFilterVM
+                                {
+                                    PdId = p.PdId,  //รหัวสินค้า
+                                    ColorId = p.ColorId,
+                                    ColorName = p_color.ColorName, //สี
+                                    SizeId = p.SizeId,
+                                    SizeName = p_size.SizeName, //ขนาด
+                                    TargetId = p.TargetId,
+                                    TargetName = p_target.TargetName, //กลุ่มลูกค้า ชาย หญิง เด็ก
+                                    PdName = p.PdName, //ชื่อสินค้า
+                                    PdtId = p.PdtId,
+                                    PdtName = p_pt.PdtName, //ประเภทสินค้า 
+                                    PdPrice = p.PdPrice, //ราคา
+                                    PdCost = p.PdCost, //ต้นทุน
+                                    PdStk = p.PdStk, //คงเหลือ
+                                    StatusName = p_status.StatusName, //สถาานะ
+                                };
+
+            Console.WriteLine("Products:");
+			foreach (var product in productFilter)
+			{
+				Console.WriteLine($"Product Id: {product.PdId}");
+			}
+
+			Console.WriteLine("Size Ids:");
+			foreach (var sizeId in sizeIds)
+			{
+				Console.WriteLine($"Size Id: {sizeId}");
+			}
+
+			return PartialView("_ProductList", productFilter);
         }
 
+		[HttpPost]
+		public ActionResult GetStock(string PrefixPdId, string colorId, string sizeId)
+		{
+			// ดึงข้อมูลจำนวนสินค้าคงเหลือจากฐานข้อมูล
+			byte colorByte = byte.Parse(colorId);
+			byte sizeByte = byte.Parse(sizeId);
+			// โดยใช้ colorId และ sizeId ที่ได้รับจาก client
+			// ส่งข้อมูลจำนวนสินค้าคงเหลือกลับไปยัง client
+			var stockRemain =  (from p in _db.Products
+								    where p.PdId.StartsWith(PrefixPdId) && p.ColorId == colorByte && p.SizeId == sizeByte
+								select p.PdStk).FirstOrDefault();
+			//return View(stockRemain);
+			return Content(stockRemain.ToString());
+		}
 
 
-
-    }
+	}
 }
 
 

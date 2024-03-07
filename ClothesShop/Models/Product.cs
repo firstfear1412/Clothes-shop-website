@@ -33,7 +33,7 @@ public partial class Product
     public double? PdCost { get; set; }
 
     [Display(Name = "คงเหลือ")]
-    public double? PdStk { get; set; }
+    public int? PdStk { get; set; }
 
     [Display(Name = "ประเภทสินค้า")]
     public byte? PdtId { get; set; }
@@ -45,7 +45,7 @@ public partial class Product
     public byte? TargetId { get; set; }
 
     [Display(Name = "ผู้ผลิต")]
-    public byte? SupId { get; set; }
+    public string? SupId { get; set; }
 
     public DateOnly? PdLastBuy { get; set; }
 

@@ -1,0 +1,107 @@
+﻿
+@model ClothesShop.Models.Customer
+@{
+
+    Layout = "_AdminLayoutEdit";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+@{
+    var stext = ViewBag.stext;
+}
+
+@* 
+<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-2 text-gray-800">Create Customers</h1>
+</div>
+ *@
+
+
+@* test *@
+<div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+            <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+            <div class="col-lg-7">
+                <div class="p-5">
+                    <div class="text-center">
+                        <h1 class="h4 text-gray-900 mb-4">Customers Create an Account!</h1>
+                    </div>
+                    <form asp-action="Create" >
+                        <!-- input Customer id : CusId -->
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            @* <label type="hidden" asp-for="CusId" class="control-label"></label> *@
+                            <input type="hidden" asp-for="CusId" value="CXXX" class="form-control" />
+                            <span asp-validation-for="CusId" class="text-danger"></span>
+                            @* value="@ViewBag.LastCustomerId" *@
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CusName" class="control-label">USER NAME</label>
+                            <input asp-for="CusName" class="form-control" />
+                            <span asp-validation-for="CusName" class="text-danger"></span>
+                        </div>
+
+                        <!-- input Customer CusLogin : CusLogin -->
+                        <div class="form-group">
+                            <label asp-for="CusLogin" class="control-label">USER ID</label>
+                            <input asp-for="CusLogin" class="form-control" />
+                            <span asp-validation-for="CusLogin" class="text-danger"></span>
+                        </div>
+                        <!-- input Customer CusPass : CusPass -->
+                        <div class="form-group">
+                            <label asp-for="CusPass" class="control-label">PASSWORD</label>
+                            <input asp-for="CusPass" class="form-control" />
+                            <span asp-validation-for="CusPass" class="text-danger"></span>
+                        </div>
+
+                        <!-- input Customer CusEmail : CusEmail -->
+                        <div class="form-group">
+                            <label asp-for="CusEmail" class="control-label">E-MAIL</label>
+                            <input type="email" asp-for="CusEmail" class="form-control" />
+                            <span asp-validation-for="CusEmail" class="text-danger"></span>
+                        </div>
+
+                        <!-- input Customer StartDate : StartDate -->
+                        <div class="form-group">
+                            @* <label type="hidden"  asp-for="StartDate" class="control-label"></label> *@
+                            <input type="hidden" asp-for="StartDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <input class="btn btn-success btn-user btn-block" type="submit" value="Register Account" />
+                        </div>
+                        <br>
+                     @*    <hr> *@
+                 
+                    </form>
+                    @* <hr> *@
+                 @*    <div class="text-center">
+                        <a class="small" href="forgot-password.html">Forgot Password?</a>
+                    </div>
+                    <div class="text-center">
+                        <a class="small" href="login.html">Already have an account? Login!</a>
+                    </div> *@
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

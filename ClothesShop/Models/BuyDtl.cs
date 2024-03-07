@@ -9,7 +9,7 @@ public partial class BuyDtl
 
     public string PdId { get; set; } = null!;
 
-    public double? BdtlQty { get; set; }
+    public int? BdtlQty { get; set; }
 
     public double? BdtlPrice { get; set; }
 

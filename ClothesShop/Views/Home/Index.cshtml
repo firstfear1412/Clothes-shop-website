@@ -1,51 +1,154 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-}
+    Layout = "_HomeLayout";
 
+}
+@model IEnumerable<ClothesShop.ViewModels.PdVM>
 @using Microsoft.AspNetCore.Http;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
-<div>
-    @if(TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-    }
-    @if(HttpContextAccessor.HttpContext.Session.GetString("CusId") == null)
-{
-    <div class="text-center">
-        <div class="display-4">
-            KuShop
+<article id="scroller">
+    <section id="carouselMain" class="carousel slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselMain" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselMain" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselMain" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-        <form asp-controller="Home" asp-action="login" method="post">
-            <div class="row text-center justify-content-center m-3">
-                @* bootsrap แบ่งเป็น 12 ช่อง/grid *@
-                <div class="col-lg-4">
-                    <div class="input-group">
-                            <div class="input-group-text"><i class="bi bi-person-circle"></i></div>
-                        <input type="text" name="userName" class="form-control" required />
-                    </div>
+        <div class="carousel-inner vh-100">
+            <div class="carousel-item active">
+                <video autoplay loop muted disablePictureInPicture controlslist="nodownload" type="video/mp4" src="/video/cool.mp4"></video>
+                <div class="carousel-content" style="left:10%;">
+                    <h5>เสื้อผ้าคุณภาพพิเศษเหมาะสำหรับคนพิเศษอย่างคุณ</h5>
+                    <p>มีเสื้อผ้าให้เลือกมากมายสำหรับ เด็ก คุณผู้ชายและคุณผู้หญิง</p>
                 </div>
             </div>
-            <div class="row text-center justify-content-center m-3">
-                @* bootsrap แบ่งเป็น 12 ช่อง/grid *@
-                <div class="col-lg-4">
-                    <div class="input-group">
-                            <div class="input-group-text"><i class="bi bi-unlock-fill"></i></div>
-                            <input type="password" name="userPass" class="form-control" required />
-                    </div>
+            <div class="carousel-item">
+                <img src="/carousel/banner2.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-content text-end" style="right:10%;">
+                    <h5>ข้อความกึ่งกลางฝั่งซ้าย</h5>
+                    <p>รายละเอียดเพิ่มเติมหรืออื่นๆ</p>
                 </div>
             </div>
-            <div class="row text-center justify-content-center m-3">
-                <div class="col-lg-2">
-                    <button type="button" class="btn btn-link">สมัครใหม่</button>
-                </div>
-                <div class="col-lg-2">
-                    <button type="submit" class="btn btn-primary">Login</button>
+            <div class="carousel-item">
+                <img src="/carousel/banner3.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-content text-start" style="left:10%">
+                    <h5>ข้อความกึ่งกลางฝั่งซ้าย</h5>
+                    <p>รายละเอียดเพิ่มเติมหรืออื่นๆ</p>
                 </div>
             </div>
-        </form>
-    </div>
-}
-else{
-    <div class="display-4">Welcome @HttpContextAccessor.HttpContext.Session.GetString("CusName")</div>
-}
-</div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselMain" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselMain" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </section>
+    <section id="carauselVideo" class="carousel slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carauselVideo" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carauselVideo" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carauselVideo" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <video autoplay loop muted disablePictureInPicture controlslist="nodownload" type="video/mp4" src="/video/main.mp4"></video>
+                 @* mario ไฟล์ใหญ่ไปอัปกิตฮับไม่ได้ *@
+                @* <video autoplay loop muted disablePictureInPicture controlslist="nodownload" type="video/mp4" src="/video/main.mp4"></video> *@
+                <div class="carousel-content" style="left:10%;">
+                    <h5>เสื้อผ้าคุณภาพพิเศษเหมาะสำหรับคนพิเศษอย่างคุณ</h5>
+                    <p>มีเสื้อผ้าให้เลือกมากมายสำหรับ เด็ก คุณผู้ชายและคุณผู้หญิง</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/carousel/banner2.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-content text-end" style="right:10%;">
+                    <h5>ข้อความกึ่งกลางฝั่งซ้าย</h5>
+                    <p>รายละเอียดเพิ่มเติมหรืออื่นๆ</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/carousel/banner3.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-content text-start" style="left:10%">
+                    <h5>ข้อความกึ่งกลางฝั่งซ้าย</h5>
+                    <p>รายละเอียดเพิ่มเติมหรืออื่นๆ</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carauselVideo" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carauselVideo" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </section>
+    <section class="d-flex justify-content-center" id="mySection">
+        <div class="row align-items-center mx-5">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-md-4 col-sm-6 text-center flex-grow-1">
+                    <img style="width:180px !important;height:180px !important;" class="bd-placeholder-img rounded-circle" src="/imgpd/@(item.PdId).png" />
+                    <h2>@item.PdName</h2>
+                    <p class="text-3-line">@item.PdDtls</p>
+                    <p><a asp-controller="Product" asp-action="show" asp-route-id="@item.PdId" class="btn btn-secondary">ดูรายละเอียด</a></p>
+                </div>
+            }
+        </div>
+    </section> 
+     @* <section>
+        <div class="row align-items-center mx-5">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 text-center">
+                    <img style="width:20vw !important;height:20vh !important;" class="bd-placeholder-img rounded-circle" src="/imgpd/@(item.PdId).png" />
+                    <h2>@item.PdName</h2>
+                    <p style="display: -webkit-box; -webkit-line-clamp: 3; box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">@item.PdDtls</p>
+                    <p><a asp-controller="Product" asp-action="show" asp-route-id="@item.PdId" class="btn btn-secondary">ดูรายละเอียด</a></p>
+                </div>
+            }
+        </div>
+    </section>
+    <style>
+        .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        @@media screen and (max-width: 768px) {
+            .row {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>  *@
+    <section style="position: relative; height: 100vh !important;">
+        @* <section class="bg-secondary" style="--bs-bg-opacity: .5;"> *@
+            <img src="/carousel/sec2-1.jpg" class="img-fluid" alt="...">
+        <div class="row align-items-center mx-6 fixOverlay">
+            @* <div class="row align-items-center mx-6 fixOverlay"> *@
+            <div class="col-md-7">
+                <h2>And lastly, this one</h2>
+                <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really intended to be actually read, simply here to give you a better view of what this would look like with some actual content. Your content</p>
+            </div>
+            <div class="col-md-5">
+                @* <img class="img-fluid mx-auto" style="width:500px;height:500px;" src="/imgpd/P001-01-01.png" /> *@
+            </div>
+        </div>
+    </section>
+</article>
+<script>
+    window.addEventListener('resize', function () {
+        var section = document.getElementById('mySection');
+        var screenWidth = window.innerWidth;
+        if (screenWidth < 768) { // ความกว้างของหน้าจอเล็กกว่า sm (576px)
+            section.style.setProperty('height', 'unset', 'important');
+
+        } else {
+            section.style.setProperty('height', '90vh', 'important');
+
+        }
+    });
+</script>

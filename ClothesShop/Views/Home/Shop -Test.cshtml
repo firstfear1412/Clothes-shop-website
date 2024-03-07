@@ -1,0 +1,76 @@
+﻿@model IEnumerable<ClothesShop.ViewModels.PdFilterVM>
+@{
+	ViewData["Title"] = "Home Page";
+}
+@*
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+*@
+@if (TempData["ErrorMessage"] != null)
+{
+	<div class="alert alert-danger">
+		@TempData["ErrorMessage"]
+	</div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+	<div class="alert alert-warning">
+		@TempData["SuccessMessage"]
+	</div>
+}
+@{
+	var stext = ViewBag.stext;
+}
+
+<div class="sidebar">
+	<h4>Size</h4>
+	<ul>
+		@foreach (var size in ViewBag.FilterSize)
+		{
+			<li>
+				<input type="checkbox" name="sizes" value="@size.SizeId" id="size=@size.SizeId" />
+				<label for="size-@size.SizeId">@size.SizeName ID => @size.SizeId</label>
+			</li>
+		}
+	</ul>
+</div>
+<div class="main">
+	<h2>Products</h2>
+	<ul id="product-list">
+		@foreach (var product in Model)
+		{
+			<li>
+				ชื่อสินค้า : @product.PdName ขนาด : @product.SizeName
+			</li>
+		}
+	</ul>
+</div>
+@section Scripts{
+	<script>
+		console.log("connect Script Success");
+		$('input[type = "checkbox"][name = "sizes"]').on('change', function () {
+			var selectSizes = $('input[type = "checkbox"][name = "sizes"]:checked').map(function () {
+				return $(this).val();
+			}).get();
+			console.log(selectSizes);
+			$.ajax({
+				url: '@Url.Action("GetFilteredProducts", "Product")',
+				type: 'POST',
+				dataType: 'html',
+				data: {
+					sizeIds: selectSizes
+				},
+				success: function (result) {
+					$('#product-list').html(result);
+				},
+				error: function () {
+					console.log('An error while get filtered');
+			}
+			});
+		});
+	</script>
+}

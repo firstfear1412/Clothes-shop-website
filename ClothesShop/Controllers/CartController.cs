@@ -20,8 +20,11 @@ namespace ClothesShop.Controllers
         }
         public IActionResult AddDtl(string pdid,int qty)
         {
-            //ตรวจสอบ Login??
-            if (HttpContext.Session.GetString("CusId") == null)
+			Console.WriteLine("AddDetail Function");
+			Console.WriteLine($"Product Id: {pdid}");
+			Console.WriteLine($"Quantity: {qty}");
+			//ตรวจสอบ Login??
+			if (HttpContext.Session.GetString("CusId") == null)
             {
                 TempData["ErrorMessage"] = "Login ก่อนซื้อสินค้า";
                 return RedirectToAction("Login", "Home"); //ยังไม่ได้สร้าง ต้องไปสร้างก่อน

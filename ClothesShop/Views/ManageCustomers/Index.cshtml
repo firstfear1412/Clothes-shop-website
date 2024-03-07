@@ -1,0 +1,157 @@
+﻿@model IEnumerable<ClothesShop.ViewModels.CustomerVM>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // ViewData["Title"] = "บันทึกใหม่";
+    // Layout = "_AdminLayout";
+    Layout = "_AdminLayoutEdit";
+
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+@{
+    var stext = ViewBag.stext;
+}
+
+<!-- Page Heading -->
+
+<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-2 text-gray-800">List Customers</h1>
+</div>
+<div class="row">
+    <div class="row mb-4">
+        <div class="col-xl-8 col-lg-7">
+
+            @*        <div class="d-sm-flex align-items-center justify-content-between mb-1">
+            <h1 class="h4 mb-0 text-gray-800">
+            Add a new Product
+            </h1>
+            </div>
+            <h1 class="h6 mb-0 text-gray-800">
+            Orders placed across your store
+            </h1> *@
+
+        </div>
+        <div class="col-xl-4 col-lg-5">
+            <div class="position-absolute bottom-0 end-0">
+                <a class="btn btn-outline-primary" asp-area="" asp-controller="ManageCustomers" asp-action="Create">Add Customers</a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DataTables List Customers</h6>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered display" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+
+                        @* <th>Images</th> *@
+                        <th>Customers ID</th>
+                        <th>Name</th>
+                        <th>User ID</th>
+                        <th>Password</th>
+                        <th>Email</th>
+                       @*  <th>CusAdd</th> *@
+                        <th>StartDate</th>
+                        <th>LastLogin</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                   
+
+
+
+
+
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+
+                        @* <th>Images</th> *@
+                        <th>Customers ID</th>
+                        <th>Name</th>
+                        <th>User ID</th>
+                        <th>Password</th>
+                        <th>Email</th>
+                       @*  <th>CusAdd</th> *@
+                        <th>StartDate</th>
+                        <th>LastLogin</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        @* var pdimg = "/imgpd/" + item.PdId + ".png"; *@
+
+
+
+                        /* Razor page ใช้เครื่องหมาย @ หน้าตัวแปรที่ต้องการแสดงผล */
+                        <tr>
+                            @* <td>Img</td> *@ @* Img *@
+                            @* <td class="text-center">
+                                <div class="mx-auto" style="width: 6rem;">
+                                    <img src="@pdimg" class="card-img-top" />
+                                </div>
+
+                            </td> *@
+                            <td>@item.CusId</td> @* Product NO *@
+                            <td>@item.CusName</td> @* Name*@
+                            <td>@item.CusLogin</td> @* Color *@
+                            <td>@item.CusPass</td> @* Size *@
+                            <td>@item.CusEmail</td> @* Category *@
+                           @*  <td>@item.CusAdd</td> *@ @* Target *@
+                            <td>@item.StartDate</td> @* Inventories *@
+                            <td>@item.LastLogin</td> @* Base Price *@
+                    
+
+
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@item.CusId">
+                                    <i class="fas fa-edit"></i>
+
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Delete" asp-route-id="@item.CusId">
+                                    <i class="text-center fa fa-trash"></i>
+
+                                </a>
+                            </td>
+
+
+                        </tr>
+                    }
+
+
+     
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
