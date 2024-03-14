@@ -105,7 +105,7 @@ namespace ClothesShop.Controllers
             if (cus.ToList().Count() == 0 && stf.ToList().Count() == 0)
             {
                 TempData["ErrorMessage"] = "ผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
 
             }
 
@@ -174,10 +174,12 @@ namespace ClothesShop.Controllers
                 return RedirectToAction("Index");
             }
             var pdvm = from p in _db.Products
+                           //from p in _db.Products.Take(4)
+
+
                        join pt in _db.ProductTypes on p.PdtId equals pt.PdtId into join_p_pt
+
                        from p_pt in join_p_pt.DefaultIfEmpty()
-                           //join b in _db.Brands on p.BrandId equals b.BrandId into join_p_b
-                           //from p_b in join_p_b.DefaultIfEmpty()
 
                        join color in _db.Colors on p.ColorId equals color.ColorId into join_p_color
                        from p_color in join_p_color.DefaultIfEmpty()
@@ -190,14 +192,17 @@ namespace ClothesShop.Controllers
 
                        join status in _db.Statuses on p.StatusId equals status.StatusId into join_p_status
                        from p_status in join_p_status.DefaultIfEmpty()
-
                        where p.PdName.Contains(stext) ||
                             p_pt.PdtName.Contains(stext)
 
-                       select new PdVM
+                       select new PdFilterVM
+
                        {
+
                            PdId = p.PdId,  //รหัวสินค้า
+                           ColorId = p.ColorId,
                            ColorName = p_color.ColorName, //สี
+                           SizeId = p_size.SizeId,
                            SizeName = p_size.SizeName, //ขนาด
                            TargetName = p_target.TargetName, //กลุ่มลูกค้า ชาย หญิง เด็ก
                            PdName = p.PdName, //ชื่อสินค้า
@@ -206,8 +211,33 @@ namespace ClothesShop.Controllers
                            PdCost = p.PdCost, //ต้นทุน
                            PdStk = p.PdStk, //คงเหลือ
                            StatusName = p_status.StatusName, //สถาานะ
+
                        };
+            var FilterCategory = from t in _db.ProductTypes
+                                 select new
+                                 {
+                                     PdtId = t.PdtId,
+                                     PdtName = t.PdtName,
+                                 };
+            var FilterColor = from c in _db.Colors
+                              select new
+                              {
+                                  colorId = c.ColorId,
+                                  colorName = c.ColorName,
+                              };
+            var FilterSize = from s in _db.Sizes
+                             select new
+                             {
+                                 SizeId = s.SizeId,
+                                 SizeName = s.SizeName,
+                             };
+
             if (pdvm == null) return NotFound();
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+            ViewData["FilterCategory"] = FilterCategory.ToList();
+            ViewData["FilterColor"] = FilterColor.ToList();
+            ViewData["FilterSize"] = FilterSize.ToList();
+            
             ViewBag.stext = stext;
             return View(pdvm);
         }

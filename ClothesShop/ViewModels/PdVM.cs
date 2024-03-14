@@ -16,7 +16,7 @@ namespace ClothesShop.ViewModels
 
         public double? PdCost { get; set; }
 
-        public double? PdStk { get; set; }
+        public int? PdStk { get; set; }
 
         public string? PdtName { get; set; }
 

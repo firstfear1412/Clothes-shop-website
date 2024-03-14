@@ -10,7 +10,7 @@
         public string ColorName { get; set; }
         public string SizeName { get; set; }
 
-        public double? CdtlQty { get; set; }
+        public int? CdtlQty { get; set; }
 
         public double? CdtlPrice { get; set; }
 

@@ -23,6 +23,7 @@ namespace ClothesShop.Controllers
 			Console.WriteLine("AddDetail Function");
 			Console.WriteLine($"Product Id: {pdid}");
 			Console.WriteLine($"Quantity: {qty}");
+			var currentUrl = HttpContext.Session.GetString("CurrentUrl");
 			//ตรวจสอบ Login??
 			if (HttpContext.Session.GetString("CusId") == null)
             {
@@ -83,9 +84,11 @@ namespace ClothesShop.Controllers
             HttpContext.Session.SetString("CartQty", CartQty.ToString());
             HttpContext.Session.SetString("CartMoney", CartMoney.ToString());
 
-            return RedirectToAction("Index", "Home");
+			//return RedirectToAction("Index", "Home");
+			return Redirect(currentUrl!);
 
-        }
+
+		}
         public IActionResult Add(string pdid, int qty)
         {
             //Gen CartId
@@ -94,8 +97,9 @@ namespace ClothesShop.Controllers
             int i = 0;
             string today;
             string CusId = HttpContext.Session.GetString("CusId");
+			var currentUrl = HttpContext.Session.GetString("CurrentUrl");
 
-            CultureInfo us = new CultureInfo("en-US");
+			CultureInfo us = new CultureInfo("en-US");
             do
             {
                 //สร้าง id จากปีเดิอนปัจจุบันต่อด้วยลำดับ รูปแบบ 000x
@@ -209,9 +213,10 @@ namespace ClothesShop.Controllers
                 HttpContext.Session.SetString("CartQty", obj.CartQty.ToString());
                 HttpContext.Session.SetString("CartMoney",obj.CartMoney.ToString());
             }
-            return RedirectToAction("Shop","Home");
+            //return RedirectToAction("Shop","Home"); แก้เพื่อให้สามารถ Login แล้วกลับไปยังหน้า Index ก่อน
+			return RedirectToAction("Index", "Home");
 
-        }
+		}
         public IActionResult Delete(string cartid) {
             var detail = from ctd in _db.CartDtls
                          where ctd.CartId.Equals(cartid)

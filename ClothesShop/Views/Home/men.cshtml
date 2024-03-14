@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<ClothesShop.ViewModels.PdFilterVM>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 @{
 	ViewData["Title"] = "Home Page";
 }
@@ -24,6 +25,7 @@
 }
 @{
 	var stext = ViewBag.stext;
+	HttpContextAccessor.HttpContext.Session.SetString("CurrentUrl", "/Home/men");
 }
 
 <h1>KU Shop</h1>
