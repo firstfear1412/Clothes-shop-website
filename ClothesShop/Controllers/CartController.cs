@@ -20,8 +20,12 @@ namespace ClothesShop.Controllers
         }
         public IActionResult AddDtl(string pdid,int qty)
         {
-            //ตรวจสอบ Login??
-            if (HttpContext.Session.GetString("CusId") == null)
+			Console.WriteLine("AddDetail Function");
+			Console.WriteLine($"Product Id: {pdid}");
+			Console.WriteLine($"Quantity: {qty}");
+			var currentUrl = HttpContext.Session.GetString("CurrentUrl");
+			//ตรวจสอบ Login??
+			if (HttpContext.Session.GetString("CusId") == null)
             {
                 TempData["ErrorMessage"] = "Login ก่อนซื้อสินค้า";
                 return RedirectToAction("Login", "Home"); //ยังไม่ได้สร้าง ต้องไปสร้างก่อน
@@ -80,9 +84,10 @@ namespace ClothesShop.Controllers
             HttpContext.Session.SetString("CartQty", CartQty.ToString());
             HttpContext.Session.SetString("CartMoney", CartMoney.ToString());
 
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home");
+			return Redirect(currentUrl!);
 
-        }
+		}
         public IActionResult Add(string pdid, int qty)
         {
             //Gen CartId
@@ -136,6 +141,17 @@ namespace ClothesShop.Controllers
         }
         public IActionResult Show(string cartid)
         {
+            if (cartid == null)
+            {
+                TempData["ErrorMessage"] = "ต้องระบุค่า cartid";
+                return RedirectToAction("Index");
+            }
+            if (HttpContext.Session.GetString("CusId") == null)
+            {
+                TempData["ErrorMessage"] = "กรุณาเข้าสู่ระบบ";
+                return RedirectToAction("Index");
+            }
+            
             //Master
             //ตรวจสอบว่าเป็นตะกร้าของลูกค้าที่ใช้งานอยู่หรือไม่
             //ได้ข้อมูล Cart เป็นส่วน Master
@@ -149,7 +165,12 @@ namespace ClothesShop.Controllers
                 TempData["ErrorMessage"] = "ไม่พบตะกร้าที่ระบุ";
                 return RedirectToAction("Index", "Home");
             }
-
+            var CartCheckID = _db.Carts.Find(cartid);
+            if (CartCheckID!.CusId != cusid)
+            {
+                TempData["ErrorMessage"] = "คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล";
+                return RedirectToAction("List", new { cusid = cusid });
+            }
             //Detail เลือกข้อมูลของตะกร้า+สร้าง ViewModel CtdVM แสดงชื่อสินค้า
             var cartdtl = from ctd in _db.CartDtls
 
@@ -191,11 +212,16 @@ namespace ClothesShop.Controllers
         public IActionResult Check()
         {
             string cusid = HttpContext.Session.GetString("CusId");
-            var cart = from ct in _db.Carts.Take(1)
+            //var cart = from ct in _db.Carts.Take(1)
+            //           where ct.CusId.Equals(cusid) && ct.CartCf != "Y"
+            //           select ct;
+            var cart = from ct in _db.Carts
                        where ct.CusId.Equals(cusid) && ct.CartCf != "Y"
                        select ct;
             int rowCount = cart.Count();
-            if(rowCount > 0)
+            Console.WriteLine($"===========================");
+            Console.WriteLine($"CountRow: {rowCount}");
+            if (rowCount > 0)
             {
                 Cart obj = new Cart();
                 foreach(var item in cart)
@@ -206,7 +232,7 @@ namespace ClothesShop.Controllers
                 HttpContext.Session.SetString("CartQty", obj.CartQty.ToString());
                 HttpContext.Session.SetString("CartMoney",obj.CartMoney.ToString());
             }
-            return RedirectToAction("Shop","Home");
+            return RedirectToAction("Index","Home");
 
         }
         public IActionResult Delete(string cartid) {
@@ -233,7 +259,7 @@ namespace ClothesShop.Controllers
             HttpContext.Session.Remove("CartMoney");
 
             TempData["SuccessMessage"] = "ยกเลิกคำสั่งซื้อแล้ว";
-            return RedirectToAction("Shop", "Home");
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult DeleteDtl(string pdid,string cartid)
         {
@@ -258,7 +284,7 @@ namespace ClothesShop.Controllers
                 HttpContext.Session.Remove("CartMoney");
 
                 TempData["SuccessMessage"] = "ยกเลิกคำสั่งซื้อแล้ว";
-                return RedirectToAction("Shop", "Home");
+                return RedirectToAction("Index", "Home");
 
             }
             else
@@ -306,15 +332,55 @@ namespace ClothesShop.Controllers
             HttpContext.Session.Remove("CartMoney");
 
             TempData["SuccessMessage"] = "ยืนยันคำสั่งซื้อแล้ว";
-            return RedirectToAction("Shop", "Home");
+            return RedirectToAction("List", "Cart", new { cusid = master.CusId });
+            //return RedirectToAction("Index", "Home");
         }
         public IActionResult List(string cusid)
         {
+            if (cusid == null)
+            {
+                TempData["ErrorMessage"] = "ต้องระบุค่า id";
+                return RedirectToAction("Index");
+            }
+            if (HttpContext.Session.GetString("CusId") == null)
+            {
+                TempData["ErrorMessage"] = "กรุณาเข้าสู่ระบบ";
+                return RedirectToAction("Index");
+            }
+            if (HttpContext.Session.GetString("CusId") != cusid)
+            {
+                TempData["ErrorMessage"] = "คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล";
+                return RedirectToAction("List", new { cusid = HttpContext.Session.GetString("CusId") });
+            }
             var cart = from c in _db.Carts
-                       where c.CusId.Equals(cusid)
+                       //where c.CusId.Equals(cusid)
+                       where c.CusId.Equals(cusid) && c.CartCf == "Y"
                        orderby c.CartId descending
                        select c;
             return View(cart);
+        }
+        public IActionResult Paid(string cartid)
+        {
+            var cartdtl = from ctd in _db.CartDtls
+                          where ctd.CartId.Equals(cartid)
+                          select ctd;
+            int rowCount = cartdtl.Count();
+            if (rowCount == 0)
+            {
+                TempData["ErrorMessage"] = "ชำระเงินผิดพลาด";
+                return RedirectToAction("show", "Cart", new { cartid = cartid });
+            }
+
+            //update cart for Paid
+            var master = _db.Carts.Find(cartid);
+            master.CartPay = "Y";
+            master.CartSend = "กำลังจัดเตรียมสินค้า";
+            _db.Entry(master).State = EntityState.Modified;
+            _db.SaveChanges();
+
+
+            TempData["SuccessMessage"] = "ชำระเงินแล้ว";
+            return RedirectToAction("List", "Cart", new { cusid = master.CusId });
         }
     }
 }

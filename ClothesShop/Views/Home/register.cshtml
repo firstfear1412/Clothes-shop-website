@@ -1,0 +1,138 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ClothesShop.Models.Customer
+@{
+    Layout = null;
+    // ViewData["Title"] = "Register Page";
+    <title>Register</title>
+
+}
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Register</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="~/AdminTemplate/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="~/AdminTemplate/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-gradient-primary">
+
+
+    <div class="container">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger mt-3" role="alert">
+              
+                @ViewBag.ErrorMessage;
+            </div>
+        }
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                            </div>
+
+                            <form class="user"  asp-action="register">
+                                    <!-- input Customer id : CusId -->
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        @* <label type="hidden" asp-for="CusId" class="control-label"></label> *@
+                                    <input type="hidden" asp-for="CusId" value="CXXX" class="form-control form-control-user"  />
+                                        <span asp-validation-for="CusId" class="text-danger"></span>
+                                        @* value="@ViewBag.LastCustomerId" *@
+                                    </div>
+                                    <div class="form-group">
+                                      @*   <label asp-for="CusName" class="control-label">USER NAME</label> *@
+                                    <input asp-for="CusName" class="form-control form-control-user" placeholder="Enter Name" required />
+                                        <span asp-validation-for="CusName" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- input Customer CusLogin : CusLogin -->
+                                    <div class="form-group">
+                                    @*     <label asp-for="CusLogin" class="control-label">USER ID</label> *@
+                                    <input asp-for="CusLogin" class="form-control form-control-user" placeholder="Enter Username ID" required />
+                                        <span asp-validation-for="CusLogin" class="text-danger"></span>
+                                    </div>
+                                    <!-- input Customer CusPass : CusPass -->
+                                    <div class="form-group">
+                              @*           <label asp-for="CusPass" class="control-label">PASSWORD</label> *@
+                                    <input asp-for="CusPass" class="form-control form-control-user" placeholder="Password" required />
+                                        <span asp-validation-for="CusPass" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- input Customer CusEmail : CusEmail -->
+                                    <div class="form-group">
+                             @*            <label asp-for="CusEmail" class="control-label">E-MAIL</label> *@
+                                    <input type="email" asp-for="CusEmail" class="form-control form-control-user" placeholder="Enter Email" required />
+                                        <span asp-validation-for="CusEmail" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- input Customer StartDate : StartDate -->
+                                    <div class="form-group">
+                                        @* <label type="hidden"  asp-for="StartDate" class="control-label"></label> *@
+                                        <input type="hidden" asp-for="StartDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+                                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                                    </div>
+                                    <br>
+                                    <div class="mb-3">
+                                    <input class="btn btn-primary btn-user btn-block" type="submit" value="Register Account" />
+                                    </div>
+                                    <br>
+                                    @*    <hr> *@
+
+                                </form>
+                            <hr>
+                
+                            <div class="text-center">
+                                <a class="small" asp-area="" asp-controller="Home" asp-action="Login">Already have an account? Login!</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/AdminTemplate/vendor/jquery/jquery.min.js"></script>
+    <script src="~/AdminTemplate/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/AdminTemplate/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/AdminTemplate/js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>

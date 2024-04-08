@@ -13,7 +13,7 @@ public partial class Cart
 
     public double? CartMoney { get; set; }
 
-    public double? CartQty { get; set; }
+    public int? CartQty { get; set; }
 
     public string? CartCf { get; set; }
 

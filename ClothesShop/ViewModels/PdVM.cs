@@ -10,12 +10,13 @@ namespace ClothesShop.ViewModels
         public string SizeName { get; set; }
 
         public string PdName { get; set; } = null!;
+        public string? PdDtls { get; set; }
 
         public double? PdPrice { get; set; }
 
         public double? PdCost { get; set; }
 
-        public double? PdStk { get; set; }
+        public int? PdStk { get; set; }
 
         public string? PdtName { get; set; }
 
@@ -31,19 +32,9 @@ namespace ClothesShop.ViewModels
 
 
         public byte? SupId { get; set; }
+        public string? SupName { get; set; }
 
 
-        //public string PdId { get; set; } = null!;
-
-        //public string PdName { get; set; } = null!;
-
-        //public string? PdtName { get; set; }
-
-        //public double? PdPrice { get; set; }
-
-        //public double? PdCost { get; set; }
-
-        //public double? PdStk { get; set; }
 
     }
 }

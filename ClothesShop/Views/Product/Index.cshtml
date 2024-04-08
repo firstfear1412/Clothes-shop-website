@@ -3,6 +3,12 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    // ViewData["Title"] = "บันทึกใหม่";
+    // Layout = "_AdminLayout";
+    Layout = "_AdminLayoutEdit";
+    <title>List Product </title>
+ 
+
 }
 
 @if (ViewBag.ErrorMessage != null)
@@ -11,69 +17,148 @@
         @ViewBag.ErrorMessage;
     </div>
 }
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData.Peek("SuccessMessage")
+    </div>
+}
 
 @{
     var stext = ViewBag.stext;
 }
 
-<h1>Product</h1>
-@* <form autocomplete="off" id="submitForm" asp-controller="Product" asp-action="Index"> *@
-<form asp-controller="Product" asp-action="Index">
-    <div class="row">
+<!-- Page Heading -->
 
-        <div class="col">
-            <a class="btn btn-primary" asp-action="Create">เพื่ม</a>
-        </div>
-        <br></br>
+@*<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-2 text-gray-800">List Product</h1>
+</div>*@
 
-        <div class="input-group">
-            <span class="input-group-text">ค้นหา</span>
-            <input type="search" class="form-control" id="autocompleteTextBox" name="stext" placeholder="Type a name here..." />
-            <button type="submit" class="btn btn-secondary">submit</button>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    @*<div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DataTables List Product</h6>
+    </div>*@
+
+    <div class="card-body">
+        <div class="row me-2 mb-2">
+            <div class="col-sm-6 col-md-8 col-lg-9">
+                <h1 class="h3 mb-2 text-gray-800">List Product</h1>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 text-end">
+                <div class="position-absolute bottom-0 end-0">
+                    <a class="btn btn-outline-primary" asp-area="" asp-controller="Product" asp-action="Create">Add Product</a>
+
+                </div>
+            </div>
         </div>
-        @*< ul class="list"></ul> *@
+        <div class="table-responsive">
+            <table class="table table-bordered display" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+              
+                        <th>Images</th>
+                        <th>Product NO</th>
+                        <th>Name</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Category</th>
+                        <th>Target</th>
+                        <th>Inventories</th>
+                        <th>Base Price</th>
+                        <th>Base Cost</th>
+                        <th>Status</th>
+                        <th>Supplier</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                      
+
+                        
+                       
+                       
+                       
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                       
+                        <th>Images</th>
+                        <th>Product NO</th>
+                        <th>Name</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Category</th>
+                        <th>Target</th>
+                        <th>Inventories</th>
+                        <th>Base Price</th>
+                        <th>Base Cost</th>
+                        <th>Status</th>
+                        <th>Supplier</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                        
+                        
+                    </tr>
+                </tfoot>
+                <tbody>
+        
+
+                    @foreach (var item in Model)
+                    {
+                           
+                        var pdimg = "/imgpd/" + item.PdId + ".png";
+            
+           
+                       
+                        /* Razor page ใช้เครื่องหมาย @ หน้าตัวแปรที่ต้องการแสดงผล */
+                        <tr>
+                            @* <td>Img</td> *@ @* Img *@
+                            <td class="text-center">
+                                <div class="mx-auto" style="width: 6rem;">
+                                    <img src="@pdimg" class="card-img-top" />
+                                </div> 
+                                
+                            </td>
+                            <td>@item.PdId</td> @* Product NO *@
+                            <td>@item.PdName</td> @* Name*@
+                            <td>@item.ColorName</td> @* Color *@
+                            <td>@item.SizeName</td> @* Size *@
+                            <td>@item.PdtName</td> @* Category *@
+                            <td>@item.TargetName</td> @* Target *@
+                            <td>@item.PdStk</td> @* Inventories *@
+                            <td>@item.PdPrice</td> @* Base Price *@
+                            <td>@item.PdCost</td> @* Base Cost *@
+                            <td>@item.StatusName</td> @* Status*@
+                            <td>@item.SupName</td> @* Supplier*@
+                        
+
+
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@item.PdId">
+                                    <i class="fas fa-edit"></i>
+                                    
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Delete" asp-route-id="@item.PdId">
+                                    <i class="text-center fa fa-trash"></i>
+
+                                </a>
+                            </td>
+
+                            
+                            
+
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+        </div>
     </div>
-</form>
+</div>
 
 
-<table class="table">
-    <tr>
-        <th></th>
-        <th>รหัสสินค้า</th>
-        <th>ชื่อสินค้า</th>
-        <th>สีสินค้า</th>
-        <th>ขนาดสินค้า</th>
-        <th>ประเภท</th>
-        <th>ราคาขาย</th>
-        <th>คงเหลือ</th>
-    </tr>
-    @{
-        var i = 0;
-    }
-    @foreach(var item in Model)
-    {
-        i++;
-        /* Razor page ใช้เครื่องหมาย @ หน้าตัวแปรที่ต้องการแสดงผล */
-        <tr>
-        <td></td>
-        <td>@item.PdId</td>
-        <td>@item.PdName</td>
-        <td>@item.ColorName</td>
-        <td>@item.SizeName</td>
-        <td>@item.PdtName</td>
-        <td>@item.PdPrice</td>
-        <td>@item.PdStk</td>
-        <td>
-            <a asp-action="Edit" asp-route-id="@item.PdId">
-                <i class="bi bi-pencil-square"></i>
-            </a>        
-        </td>
-        <td>
-            <a asp-action="Delete" asp-route-id="@item.PdId">
-                <i class="bi bi-x-lg text-danger"></i>
-            </a>
-        </td>
 
-    </tr>
-    }
-</table>
+
+

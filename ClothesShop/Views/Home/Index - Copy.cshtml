@@ -1,0 +1,280 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_HomeLayout";
+
+}
+@model IEnumerable<ClothesShop.ViewModels.PdVM>
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+<article id="scroller">
+    <section id="carouselMen" class="carousel slide bg-secondary bg-opacity-50">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselMen" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselMen" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselMen" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner vh-100">
+            <div class="carousel-item active" data-interval="340000">
+                <video autoplay loop muted disablePictureInPicture controlslist="nodownload" type="video/mp4" src="/video/cool.mp4"></video>
+                <div class="carousel-content" style="left:10%;">
+                    <h5>เท่ห์แบบมี Style สำหรับคุณผู้ชาย</h5>
+                    <p>เราคัดสรรเสื้อผ้าสุด Exclusive มาให้โดยเฉพาะ เลือกช็อปได้ตามสบาย</p>
+                    <a class="btn btn-danger" asp-action="men" asp-controller="Home">รายละเอียด</a>
+                </div>
+            </div> 
+            <div class="carousel-item" data-interval="9999999">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <img src="/carousel/P010.png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="col-md-5" style="right:10%;">
+                        <div class="carousel-content" style="right:10%; color:white">
+                                <h5>เสื้อแจ็คเก็ต ขนเป็ด</h5>
+                                <p>เสื้อขนเป็ดอัลตร้าไลท์ดาวน์อยู่เสมอ จนได้ออกมาเป็นเสื้อขนเป็ดในดีไซน์เนื้อผ้าบาง น้ำหนักเบา และอบอุ่น ให้คุณสนุกกับการแต่งกายในสไตล์ของตัวเอง</p>
+                                <a class="btn btn-danger" asp-action="show" asp-controller="Product" asp-route-id="P010-02-02">รายละเอียด</a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="carousel-item" data-interval="9999999">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="carousel-content" style="left:10%; color:white">
+                                <h5>เบลเซอร์ Miracle Air</h5>
+                                <p>เสื้อแจ็คเก็ต ทำจากเนื้อผ้ายืดได้สองทาง น้ำหนักเบา ยืดหยุ่น และแห้งเร็ว สวมใส่ได้สบายเป็นพิเศษ ปกคอแบะหนาขึ้นเล็กน้อยสวมใส่ดูดีทุกสไตล์ทั้งแคชชวลและทางการ มีกระดุมโลหะด้านหน้า 2 เม็ดและที่แขนเสื้อ 4 เม็ด</p>
+                                <a class="btn btn-danger" asp-action="show" asp-controller="Product" asp-route-id="P013-02-02">รายละเอียด</a>
+                            </div>
+                        </div>
+                    <div class="col-md-7">
+                        <img src="/carousel/P013.png" class="d-block w-100" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselMen" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselMen" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </section>
+    
+    <section id="carauselWomen" class="carousel slide bg-secondary bg-opacity-50">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carauselWomen" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carauselWomen" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carauselWomen" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <video autoplay loop muted disablePictureInPicture controlslist="nodownload" type="video/mp4" src="/video/women.mp4"></video>
+                <div class="carousel-content" style="right:10%;">
+                    <div class="carousel-content text-end">
+                        <h5>เสริมสวยด้วย Style ในแบบคุณ</h5>
+                        <p>เราคำนึงถึงช่วงเวลาสุดพิเศษของคุณผู้หญิงอยู่เสมอ เราได้คัดสรรเสื้อผ้าที่สุดแสนสบายมาให้แล้ว เลือกช็อปที่ถูกใจได้เลย</p>
+                        <a class="btn btn-danger" asp-action="women" asp-controller="Home">รายละเอียด</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" data-interval="9999999">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="carousel-content" style="left:10%; color:white">
+                            <h5>เบลเซอร์ Miracle Air</h5>
+                            <p>เสื้อแจ็คเก็ต ทำจากเนื้อผ้ายืดได้สองทาง น้ำหนักเบา ยืดหยุ่น และแห้งเร็ว สวมใส่ได้สบายเป็นพิเศษ ปกคอแบะหนาขึ้นเล็กน้อยสวมใส่ดูดีทุกสไตล์ทั้งแคชชวลและทางการ มีกระดุมโลหะด้านหน้า 2 เม็ดและที่แขนเสื้อ 4 เม็ด</p>
+                            <a class="btn btn-danger" asp-action="show" asp-controller="Product" asp-route-id="P016-01-01">รายละเอียด</a>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <img src="/carousel/P016.png" class="d-block w-100" alt="...">
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" data-interval="9999999">
+                <div class="row">
+                    <div class="col-md-7">
+                        <img src="/carousel/P017.png" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="col-md-5" style="right:10%;">
+                        <div class="carousel-content" style="right:10%; color:white">
+                            <h5>เสื้อแจ็คเก็ต ขนเป็ด</h5>
+                            <p>เสื้อขนเป็ดอัลตร้าไลท์ดาวน์อยู่เสมอ จนได้ออกมาเป็นเสื้อขนเป็ดในดีไซน์เนื้อผ้าบาง น้ำหนักเบา และอบอุ่น ให้คุณสนุกกับการแต่งกายในสไตล์ของตัวเอง</p>
+                            <a class="btn btn-danger" asp-action="show" asp-controller="Product" asp-route-id="P017-01-01">รายละเอียด</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carauselWomen" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carauselWomen" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </section>
+
+    <section id="carauselKids" class="carousel slide bg-secondary bg-opacity-50">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carauselKids" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carauselKids" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carauselKids" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <video autoplay loop muted disablePictureInPicture controlslist="nodownload" type="video/mp4" src="/video/kids.mp4"></video>
+                <div class="carousel-content" style="left:10%;">
+                    <h5>ทุกช่วงวัยมีความหมายสำหรับเด็ก</h5>
+                    <p>เราให้ความใส่ใจทุกช่วงเวลาของชีวิตโดยคัดสรรอย่างพิถีพิถันมาอย่างดี เราคัดเลือกเสื้อผ้าสำหรับบุตรหลานของท่านไว้ที่นี้แล้ว</p>
+                    <a class="btn btn-danger" asp-action="kids" asp-controller="Home">รายละเอียด</a>
+                </div>
+            </div>
+            <div class="carousel-item" data-interval="9999999">
+                <div class="row">
+                    <div class="col-md-7">
+                        <img src="/carousel/P018.png" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="col-md-5" style="right:10%;">
+                        <div class="carousel-content" style="right:10%; color:white">
+                            <h5>เสื้อแจ็คเก็ต ขนเป็ด</h5>
+                            <p>เสื้อขนเป็ดอัลตร้าไลท์ดาวน์อยู่เสมอ จนได้ออกมาเป็นเสื้อขนเป็ดในดีไซน์เนื้อผ้าบาง น้ำหนักเบา และอบอุ่น ให้คุณสนุกกับการแต่งกายในสไตล์ของตัวเอง</p>
+                            <a class="btn btn-danger" asp-action="show" asp-controller="Product" asp-route-id="P018-01-01">รายละเอียด</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" data-interval="9999999">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="carousel-content" style="left:10%; color:white">
+                            <h5>เบลเซอร์ Miracle Air</h5>
+                            <p>เสื้อแจ็คเก็ต ทำจากเนื้อผ้ายืดได้สองทาง น้ำหนักเบา ยืดหยุ่น และแห้งเร็ว สวมใส่ได้สบายเป็นพิเศษ ปกคอแบะหนาขึ้นเล็กน้อยสวมใส่ดูดีทุกสไตล์ทั้งแคชชวลและทางการ มีกระดุมโลหะด้านหน้า 2 เม็ดและที่แขนเสื้อ 4 เม็ด</p>
+                            <a class="btn btn-danger" asp-action="show" asp-controller="Product" asp-route-id="P019-03-01">รายละเอียด</a>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <img src="/carousel/P019.png" class="d-block w-100" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carauselKids" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carauselKids" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </section>
+
+    <section id="carauselCollection" class="carousel slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carauselCollection" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carauselCollection" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carauselCollection" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <video autoplay loop muted disablePictureInPicture controlslist="nodownload" type="video/mp4" src="/video/mario.mp4"></video>
+                <div class="carousel-content" style="left:10%;">
+                    <h5>Collection ฤดูร้อน สุดพิเศษ</h5>
+                    <p>เราใส่ใจถึงสภาพอากาศที่ร้อนอยู่เสมอ เราได้ออกแบบเสื้อผ้าใส่สบาย กันแดด ถ่ายเทอากาศดี ด้วยวัสดุสุดพรีเมี่ยมไว้ให้แล้ว</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/carousel/banner2.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-content text-end" style="right:10%;">
+                    <h5>เสื้อฮู้ด AIRism UV Protection ผ้าตาข่าย มีซิป แขนยาว</h5>
+                    <p>สวมใส่สบายด้วยผ้าตาข่ายแอริซึ่ม (AIRism) ระบายอากาศได้ดี ผสานคุณสมบัติคูลทัช (Cool Touch) และดีไซน์พับเก็บได้ พร้อม UPF50+</p>
+                    <a class="btn btn-danger" asp-action="show" asp-controller="Product" asp-route-id="P015-06-01">รายละเอียด</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/carousel/banner3.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-content text-start" style="left:10%">
+                    <h5>เสื้อฮู้ด Ultra Stretch UV Protection</h5>
+                    <p>แห้งเร็วด้วยคุณสมบัติ 'ดรายเอ็กซ์' (DRY-EX) เพื่อคงความสบายตลอดวัน เทคโนโลยียูวีโพรเทคชัน (UPF50＋)</p>
+                    <a class="btn btn-danger" asp-action="show" asp-controller="Product" asp-route-id="P014-02-03">รายละเอียด</a>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carauselCollection" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carauselCollection" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </section>
+    <section class="d-flex justify-content-center" id="mySection">
+        <div class="row align-items-center mx-5">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-md-4 col-sm-6 text-center flex-grow-1">
+                    <img style="width:180px !important;height:180px !important;" class="bd-placeholder-img rounded-circle" src="/imgpd/@(item.PdId).png" />
+                    <h2>@item.PdName</h2>
+                    <p class="text-3-line">@item.PdDtls</p>
+                    <p><a asp-controller="Product" asp-action="show" asp-route-id="@item.PdId" class="btn btn-secondary">รายละเอียด</a></p>
+                </div>
+            }
+        </div>
+    </section> 
+     @* <section>
+        <div class="row align-items-center mx-5">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 text-center">
+                    <img style="width:20vw !important;height:20vh !important;" class="bd-placeholder-img rounded-circle" src="/imgpd/@(item.PdId).png" />
+                    <h2>@item.PdName</h2>
+                    <p style="display: -webkit-box; -webkit-line-clamp: 3; box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">@item.PdDtls</p>
+                    <p><a asp-controller="Product" asp-action="show" asp-route-id="@item.PdId" class="btn btn-secondary">ดูรายละเอียด</a></p>
+                </div>
+            }
+        </div>
+    </section>
+    <style>
+        .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        @@media screen and (max-width: 768px) {
+            .row {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>  *@
+    <section style="position: relative; height: 100vh !important;">
+        @* <section class="bg-secondary" style="--bs-bg-opacity: .5;"> *@
+            <img src="/carousel/sec2-1.jpg" class="img-fluid" alt="...">
+        <div class="row align-items-center mx-6 fixOverlay">
+            @* <div class="row align-items-center mx-6 fixOverlay"> *@
+            <div class="col-md-7">
+                <h2>And lastly, this one</h2>
+                <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really intended to be actually read, simply here to give you a better view of what this would look like with some actual content. Your content</p>
+            </div>
+            <div class="col-md-5">
+                @* <img class="img-fluid mx-auto" style="width:500px;height:500px;" src="/imgpd/P001-01-01.png" /> *@
+            </div>
+        </div>
+    </section>
+</article>
+<script>
+    window.addEventListener('resize', function () {
+        var section = document.getElementById('mySection');
+        var screenWidth = window.innerWidth;
+        if (screenWidth < 768) { // ความกว้างของหน้าจอเล็กกว่า sm (576px)
+            section.style.setProperty('height', 'unset', 'important');
+
+        } else {
+            section.style.setProperty('height', '90vh', 'important');
+
+        }
+    });
+</script>

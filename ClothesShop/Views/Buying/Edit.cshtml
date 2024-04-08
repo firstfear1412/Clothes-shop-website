@@ -1,0 +1,91 @@
+﻿@model ClothesShop.Models.Buying
+
+@using System.Globalization;
+
+@{
+    CultureInfo us = new CultureInfo("en-US");
+    string theDate = DateTime.Now.Date.ToString("yyyy-MM-dd", us);
+    // ViewData["Title"] = "Create";
+    <title>Edit Buying</title>
+    Layout = "_AdminLayoutEdit";
+
+}
+@if (TempData["Errormessage"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Errormessage"]</div>
+    }
+    <div ="card shadow md-4">
+        <div class="card-body">
+        <h1>Edit @Model.BuyId</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="BuyId" class="control-label">Buying ID</label>
+                        <input asp-for="BuyId" class="form-control" readonly />
+                        <span asp-validation-for="BuyId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SupId" class="control-label">Suppliers ID</label>
+                        <!--
+                          <input asp-for="SupId" class="form-control" />-->
+                        <select asp-for="SupId" class="form-select" asp-items="ViewBag.SupId"></select>
+                        <span asp-validation-for="SupId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BuyDate" class="control-label">Buying DateTime</label>
+                        <input type="text" id="BuyDate" asp-for="BuyDate" class="form-control" readonly />
+                        <span asp-validation-for="BuyDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="BuyDocId" class="control-label">Document</label>
+                        <input asp-for="BuyDocId" class="form-control" />
+                        <span asp-validation-for="BuyDocId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Saleman" class="control-label">Saleman</label>
+                        <input asp-for="Saleman" class="form-control" />
+                        <span asp-validation-for="Saleman" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="BuyRemark" class="control-label">Buying Remark</label>
+                        <input asp-for="BuyRemark" class="form-control" />
+                        <span asp-validation-for="BuyRemark" class="text-danger"></span>
+
+                        <!--สร้าง Input Hidden มาเพื่อบันทึกค่าเดิม ไม่ให้แก้ข้อมูลเป็นค่าว่าง-->
+                        <input asp-for="BuyQty" type="hidden" class="form-control" />
+                        <input asp-for="BuyMoney" type="hidden" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+<div>
+    <a asp-action="Show" asp-route-buyid="@Model.BuyId">Back to Buying Show</a>
+</div>
+
+@section Scripts {
+    <script>
+
+        $('#BuyDate').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: 'Y-m-d'
+        })
+
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,236 @@
+﻿@model ClothesShop.Models.Staff
+@{
+
+    Layout = "_AdminLayoutEdit";
+    <title>Edit Employee</title>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+
+
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData.Peek("SuccessMessage")
+    </div>
+}
+
+
+
+
+@{
+    var stext = ViewBag.stext;
+}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-2 text-gray-800">Edit Employee</h1>
+</div>
+
+<div class="row">
+    <div class="row mb-4">
+        <div class="col-xl-8 col-lg-7">
+
+            @*      <div class="d-sm-flex align-items-center justify-content-between mb-1">
+            <h1 class="h4 mb-0 text-gray-800">
+            Add a new Product
+            </h1>
+            </div>
+            <h1 class="h6 mb-0 text-gray-800">
+            Orders placed across your store
+            </h1> *@
+
+        </div>
+        <div class="col-xl-4 col-lg-5">
+            <div class="position-absolute bottom-0 end-0">
+
+
+                <a class="btn btn-outline-primary" asp-action="Index">Back to List</a>
+                <a class="btn btn-outline-primary" asp-action="Edit">Refresh</a>
+            @*     <form asp-action="DeletePost">
+                    <a class="btn btn-outline-primary" asp-action="Index">Back to List</a>
+                    <input type="hidden" asp-for="StfId" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+
+                </form> *@
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+
+    <div class="col">
+
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Customers information</h6>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-lg-4 mr-4">
+                        <!-- Media -->
+                        <div class="card shadow mb-4">
+
+
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Media</h6>
+                            </div>
+
+                            <div class="card-body">
+
+
+                                <div class="card" style="border: 1px dashed #9d9da0; border-spacing: 50px">
+                                    <div class="card-body">
+                                        @* <div class="card mx-auto" style="height: 23rem; width: 23rem"> *@
+                                        <div class="mx-auto">
+                                  
+
+
+                                               <img src="@ViewBag.ImgFile" class="card-img-top" />
+                                            
+
+                                        </div>
+                                     
+
+                                    </div>
+                                </div>
+
+                                <hr />
+            
+                                <div class="col">
+                                    <dev class="row">
+                                        <form method="post" enctype="multipart/form-data" asp-action="ImgUpload">                           
+                                            <div class="mb-3">
+                                           
+                                                <input type="hidden" name="theid" value="@Model.StfId" />
+                                           
+                                                <label for="formFile" class="form-label">Select image file</label>
+                                                <input name="imgfiles" class="form-control" type="file" accept="image/png" required>
+                                                <br>
+                                                <input class="btn btn-success" type="submit" value="Upload" />
+                                                @* <input class="form-control" type="file" id="formFile" accept="image/png" required value="@ViewBag.ImgFile"> *@
+
+                                            </div>
+                                        </form>
+                                            <div class="mb-3">
+
+
+                                            <a class="btn btn-danger" onclick="return confirm('ยืนยันการลบรูป')" asp-action="ImgDelete" asp-route-id="@Model.StfId">
+                                                    Delete
+                                                </a>
+                                            </div>
+                                    </dev>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @*  กรอกข้อมูล *@
+                    <div class="col-lg-6">
+
+                        <div class="d-sm-flex align-items-center justify-content-between mb-5">
+                            <h1 class="h3 mb-2 text-gray-800">Employee from</h1>
+                        </div>
+                        <form asp-action="Edit">
+                            <!-- input Customer StfName : StfName -->
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="StfName" class="control-label">NAME</label>
+                                <input asp-for="StfName" class="form-control" />
+                                <span asp-validation-for="StfName" class="text-danger"></span>
+                                @* value="@ViewBag.LastCustomerId" *@
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="StfId" class="control-label">Employee ID</label>
+                                <input  type="hidden" asp-for="StfId" class="form-control"/>
+                                <input asp-for="StfId" class="form-control" disabled/>
+                                <span asp-validation-for="StfId" class="text-danger"></span>
+                            </div>
+
+                            <!-- input Customer StfPass : StfPass -->
+                            <div class="form-group">
+                                <label asp-for="StfPass" class="control-label">PASSWORD</label>
+                                <input asp-for="StfPass" class="form-control" />
+                                <span asp-validation-for="StfPass" class="text-danger"></span>
+                            </div>
+                            <!-- input Customer CusPass : CusPass -->
+                            <div class="form-group">
+                                <label asp-for="DutyId" class="control-label">DUTY</label>
+                              @*   <input asp-for="DutyId" class="form-control" /> *@
+                                <select asp-for="DutyId" class="form-select">
+                                    @if(Model.DutyId == "Admin")
+                                    {
+                                        <option value="Admin" selected>Admin</option>
+                                        <option value="Sales">Sales</option>
+                                    }else if (Model.DutyId == "Sales")
+                                    {
+                                        <option value="Admin">Admin</option>
+                                        <option value="Sales" selected>Sales</option>
+                                    }
+                                    
+                                </select>
+                                <span asp-validation-for="DutyId" class="text-danger"></span>
+                            </div>
+
+                       
+
+                            <!-- input Customer StartDate : StartDate -->
+                            <div class="form-group">
+                                <label asp-for="StartDate" class="control-label">START DATA</label>
+                                <input type="hidden" asp-for="StartDate" class="form-control"/>
+                                <input asp-for="StartDate" class="form-control" disabled />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+
+                            <!-- input Customer QuitDate : QuitDate -->
+                            <div class="form-group">
+                                <label asp-for="QuitDate" class="control-label">QUIT DATE</label>
+                                <input type="hidden" asp-for="QuitDate" class="form-control" placeholder="yyyy-MM-dd" />
+                                <input asp-for="QuitDate" class="form-control" placeholder="yyyy-MM-dd" disabled />
+                                <span asp-validation-for="QuitDate" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <input class="btn btn-success" type="submit" value="Save form" />
+                            </div>
+                        </form>
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

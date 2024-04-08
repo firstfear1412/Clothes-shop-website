@@ -1,6 +1,7 @@
-﻿@model IEnumerable<ClothesShop.ViewModels.PdVM>
+﻿@model IEnumerable<ClothesShop.ViewModels.PdFilterVM>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 @{
-    ViewData["Title"] = "เสื้อผ้าเด็ก";
+	ViewData["Title"] = "Kids";
 }
 @*
 @if (ViewBag.ErrorMessage != null)
@@ -10,87 +11,187 @@
     </div>
 }
 *@
-@if (TempData["ErrorMessage"] != null)
+@* @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
-    </div>
+	<div class="alert alert-danger">
+		@TempData["ErrorMessage"]
+	</div>
 }
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-warning">
-        @TempData["SuccessMessage"]
-    </div>
-}
+	<div class="alert alert-warning">
+		@TempData["SuccessMessage"]
+	</div>
+} *@
 @{
-    var stext = ViewBag.stext;
+	var stext = ViewBag.stext;
+	HttpContextAccessor.HttpContext.Session.SetString("CurrentUrl", "/Home/kids");
+
 }
 
-<h1>KU Shop</h1>
-<form asp-controller="Home" asp-action="Shop">
-    @* <form asp-controller="Product" asp-action="Index"> *@
-    <div class="row">
-        @*         <div class="col">
-        <a class="btn btn-primary" asp-action="Create">เพิ่ม</a>
-        </div> *@
-        <div class="input-group">
-            <span class="input-group-text">ค้นหา</span>
-            <input type="search" class="form-control" id="autocompleteTextBox" name="stext" placeholder="Type a name here..." />
-            <button type="submit" class="btn btn-secondary">submit</button>
+<div class="mt-2" style="margin-left:5vw;">
+	<h1>Clothes Shop</h1>
+</div>
+@* <form asp-controller="Home" asp-action="Shop">
+	<div class="row w-50 float-right">
+		<div class="input-group">
+			<span class="input-group-text">ค้นหา</span>
+			<input type="search" class="form-control" id="autocompleteTextBox" name="stext" placeholder="Type a name here..." />
+			<button type="submit" class="btn btn-secondary">submit</button>
 
-        </div>
-    </div>
+		</div>
+	</div>
 
-</form>
-<div class="row mt-3">
-    @{
-        // Materialize the Model into a list
-        var modelList = Model.ToList();
-        // store id was displayed
-        HashSet<string> displayedIds = new HashSet<string>();
-    }
+</form> *@
 
-    @foreach (var item in modelList)
-    {
+<div class="container-fluid mt-5">
+	<h3 class="text-center text-muted">เสื้อผ้าสำหรับเด็ก</h3>
+	<input id="TargetProduct" type="hidden" value="เด็ก" />
+	<div class="row">
+		<div class="col-xl-2 col-lg-3 col-md-12">
+			<div class="cardSidebar">
+				<article class="filter-group">
+					<header class="cardSidebar-header">
+						<a href="#" data-toggle="collapse" data-target="#collapse_aside1" data-abc="true" aria-expanded="true" class="">
+							<i class="icon-control fa fa-chevron-down"></i>
+							<h6 class="title">Categories </h6>
+						</a>
+					</header>
+					<div class="filter-content collapse show" id="collapse_aside1" style="">
+						<div class="cardSidebar-body">
+							@foreach (var type in ViewBag.FilterCategory)
+							{
+								<label class="form-check">
+									<input type="checkbox" class="form-check-input" name="types" value="@type.PdtId" id="size=@type.PdtId">
+									<span class="form-check-label">@type.PdtName</span>
+								</label>
+							}
+						</div>
+					</div>
+				</article>
+				@* <article class="filter-group">
+					<header class="cardSidebar-header">
+						<a href="#" data-toggle="collapse" data-target="#collapse_aside2" data-abc="true" aria-expanded="true" class="">
+							<i class="icon-control fa fa-chevron-down"></i>
+							<h6 class="title">Price </h6>
+						</a>
+					</header>
+					<div class="filter-content collapse show" id="collapse_aside2" style="">
+						<div class="cardSidebar-body">
+							<input type="range" class="custom-range" min="0" max="100" name="">
+							<div class="row">
+								<div class="col-md-6">
+									<label>Min</label>
+									<input class="form-control" placeholder="$0" type="number">
+								</div>
+								<div class="text-right col-md-6">
+									<label>Max</label>
+									<input class="form-control" placeholder="$1,0000" type="number">
+								</div>
+							</div>
+							<a href="#" class="highlight-button btn btn-medium button xs-margin-bottom-five mt-2" data-abc="true">Apply Now</a>
+						</div>
+					</div>
+				</article> *@
+				<article class="filter-group">
+					<header class="cardSidebar-header">
+						<a href="#" data-toggle="collapse" data-target="#collapse_aside3" data-abc="true" aria-expanded="true" class="">
+							<i class="icon-control fa fa-chevron-down"></i>
+							<h6 class="title">Size </h6>
+						</a>
+					</header>
+					<div class="filter-content collapse show" id="collapse_aside3" style="">
+						<div class="cardSidebar-body">
+							@foreach (var size in ViewBag.FilterSize)
+							{
+								<label class="checkbox-btn">
+									<input type="checkbox" name="sizes" value="@size.SizeId" id="size=@size.SizeId">
+									<span class="btn btn-light"> @size.SizeName </span>
+								</label>
+							}
+						</div>
+					</div>
+				</article>
+				<article class="filter-group">
+					<header class="cardSidebar-header">
+						<a href="#" data-toggle="collapse" data-target="#collapse_aside4" data-abc="true" class="" aria-expanded="true">
+							<i class="icon-control fa fa-chevron-down"></i>
+							<h6 class="title">Color </h6>
+						</a>
+					</header>
+					<div class="filter-content collapse show" id="collapse_aside4" style="">
+						<div class="cardSidebar-body">
+							@foreach (var color in ViewBag.FilterColor)
+							{
+								<label class="form-check">
+									<input type="checkbox" class="form-check-input" name="colors" value="@color.colorId" id="size=@color.colorId">
+									<span class="form-check-label">@color.colorName</span>
+								</label>
+							}
+						</div>
+					</div>
+				</article>
+			</div>
 
-        var pdimg = "/imgpd/" + item.PdId + ".png";
-        string[] parts = item.PdId.ToString().Split('-');
-        string id = parts[0] + parts[1];
-        // For check each Id was stored or not
-        if (!displayedIds.Contains(id))
-        {
-            displayedIds.Add(id);
-        }
-        else
-        {
-            continue;
-        }
+		</div>
+		<div class="col-xl-10 col-lg-8 col-md-12 col-sm-12">
+			<div id="CardProduct-Filter" class="row">
+				@{
+					// Materialize the Model into a list
+					var modelList = Model.ToList();
+					// store id was displayed
+					HashSet<string> displayedIds = new HashSet<string>();
+					// store unique colors for each part[0]
+					// Dictionary<string, HashSet<string>> uniqueColors = new Dictionary<string, HashSet<string>>();
+				}
+				@foreach (var item in modelList)
+				{
 
-        List<string> size = new List<string>();
-        // Iterate over the list in memory
-        foreach (var otherItem in modelList)
-        {
-            string[] otherParts = otherItem.PdId.ToString().Split('-');
-            string otherId = otherParts[0] + otherParts[1];
-            if (otherId == id)
-            {
-                size.Add(otherItem.SizeName);
-            }
-        }
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
-            <div class="card px-2" style="width: 18rem;">
-                <img src="@pdimg" class="card-img-top img-fluid object-fit-cover" style="height:350px" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">@item.PdName</h5>
-                    <p class="card-subtitle text-muted">สี: @item.ColorName</p>
-                    <p class="card-subtitle text-muted">ขนาด: @string.Join(",", size.Distinct())</p>
+					var pdimg = "/imgpd/" + item.PdId + ".png";
+					string[] parts = item.PdId.ToString().Split('-');
+					string id = parts[0];
+					// For check each Id was stored or not
+					if (!displayedIds.Contains(id))
+					{
+						displayedIds.Add(id);
+					}
+					else
+					{
+						continue;
+					}
 
-                    <a class="btn btn-btn-link" asp-action="show" asp-controller="Product" asp-route-id="@item.PdId">รายละเอียด</a>
-                    <a asp-action="AddDtl" asp-controller="Cart" asp-route-pdid="@item.PdId" asp-route-qty="1" class="text-danger float-end"><i class="bi bi-cart-plus-fill"></i></a>
-                </div>
-            </div>
+					List<string> size = new List<string>();
+					List<string> colors = new List<string>();
+					@* HashSet<string> colors = new HashSet<string>(); *@
+					// Iterate over the list in memory
+					foreach (var otherItem in modelList)
+					{
+						string[] otherParts = otherItem.PdId.ToString().Split('-');
+						string otherId = otherParts[0];
+						if (otherId == id)
+						{
+							size.Add(otherItem.SizeName);
+							colors.Add(otherItem.ColorName);
+						}
+					}
+					// store unique colors for each part[0]
+					@* uniqueColors.Add(parts[0], colors); *@
+					<div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 mt-3">
+						<div class="card px-3 py-3">
+							<img src="@pdimg" class="card-img-top img-fluid object-fit-cover" style="height:30vh" alt="...">
+							<hr />
+							<div class="card-body">
+								<h5 class="card-title text-truncate">@item.PdName</h5>
+								<p class="card-subtitle text-muted">สี: @string.Join(",", colors.Distinct())</p>
+								<p class="card-subtitle text-muted">ขนาด: @string.Join(",", size.Distinct())</p>
 
-
-        </div>
-    }
+								<a class="btn btn-btn-link" asp-action="show" asp-controller="Product" asp-route-id="@item.PdId">รายละเอียด</a>
+								<a asp-action="AddDtl" asp-controller="Cart" asp-route-pdid="@item.PdId" asp-route-qty="1" class="text-danger float-end"><i class="bi bi-cart-plus-fill"></i></a>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
 </div>

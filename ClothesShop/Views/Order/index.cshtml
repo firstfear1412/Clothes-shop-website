@@ -1,0 +1,162 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<ClothesShop.ViewModels.OrderDtl>
+
+@using System.Globalization;
+@*
+
+*@
+@{
+    <title>List Order</title>
+ 
+    Layout = "_AdminLayoutEdit";
+
+}
+@{
+    CultureInfo us = new CultureInfo("en-US");
+    string theDate;
+    //ถ้าไม่ได้ระบุวันให้เป็นวันปัจจุบัน
+    if (ViewBag.theDate != null)
+        theDate = ViewBag.theDate;
+    else
+        theDate = DateTime.Now.Date.ToString("yyyy-MM-dd", us);
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+@{
+    var stext = ViewBag.stext;
+}
+
+<!-- Page Heading -->
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+
+    <div class="card-body">
+        <form asp-controller="Order" asp-action="index">
+            <div class="row mt-1 mb-2">
+                <div class="col-sm-6 col-md-8 col-lg-9">
+                    <h1 class="h1 mb-2 text-gray-800"> Order List</h1>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-8 col-lg-9">
+                    </div>
+                    <div class="col text-end">
+                        <div class="d-flex">
+                            <a asp-controller="Order" asp-action="orderToDay" class="btn btn-light me-2">Today</a>
+                            <div class="input-group">
+                                <span class="input-group-text">Date</span>
+                                <input type="text" name="theDate" id="theDate" class="form-control" value="@theDate" />
+                                <button type="submit" class="btn btn-secondary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+        <div class="table-responsive">
+
+            <table class="table table-bordered display" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Cart ID</th>
+                        <th>Customer Name</th>
+                        <th>Date Order</th>
+                        <th>Cart Quantity</th>
+                        <th>Total Price</th>
+                        <th>Pay Status</th>
+                       
+                        <th>Delivery</th>
+                        <th>Cancle</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>No.</th>
+                        <th>Cart ID</th>
+                        <th>Customer Name</th>
+                        <th>Date Order</th>
+                        <th>Cart Quantity</th>
+                        <th>Total Price</th>
+                        <th>Pay Status</th>
+                  
+                        <th>Delivery</th>
+                        <th>Cancle</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+
+                    @{
+                        var i = 0;
+                    }
+
+
+                    @foreach (var item in Model)
+                    {
+
+                        i++;
+
+
+
+                        /* Razor page ใช้เครื่องหมาย @ หน้าตัวแปรที่ต้องการแสดงผล */
+                        <tr>
+                            @* <td>Img</td> *@ @* Img *@
+                            <td>@i</td>
+                            <td>
+                                <a asp-action="Show" asp-route-CartId="@item.CartId">
+                                    @item.CartId
+                                </a>
+                            </td>
+                            <td>@item.CusName</td>
+                            <td>@item.CartDate</td>
+                            <td>@item.CartQty</td>
+                            <td>@item.CartMoney</td>
+                            @if (item.CartPay.ToLower().Contains('n'))
+                            {
+                                <td class="text-danger text-end">@item.CartPay</td>
+                            }
+                            else
+                            {
+                                <td class ="text-end">@item.CartPay</td>
+                            }
+                            <td>@item.CartSend</td>
+                            <td>@item.CartVoid</td>
+
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        //ระบุ id ที่ต้องการใช้
+        $('#theDate').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: 'Y-m-d'
+        })
+
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

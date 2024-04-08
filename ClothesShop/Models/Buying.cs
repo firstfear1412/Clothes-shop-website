@@ -17,7 +17,7 @@ public partial class Buying
 
     public string? Saleman { get; set; }
 
-    public double? BuyQty { get; set; }
+    public int? BuyQty { get; set; }
 
     public double? BuyMoney { get; set; }
 

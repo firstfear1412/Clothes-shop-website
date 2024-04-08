@@ -1,0 +1,178 @@
+﻿@model ClothesShop.Models.Customer
+@{
+
+    Layout = "_AdminLayoutEdit";
+    <title>Delete Customers</title>
+}
+
+@* @if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+} *@
+
+@{
+    var stext = ViewBag.stext;
+}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-2 text-gray-800">Delete Customers</h1>
+</div>
+
+<div class="row">
+    <div class="row mb-4">
+        <div class="col-xl-8 col-lg-7">
+
+            @*      <div class="d-sm-flex align-items-center justify-content-between mb-1">
+            <h1 class="h4 mb-0 text-gray-800">
+            Add a new Product
+            </h1>
+            </div>
+            <h1 class="h6 mb-0 text-gray-800">
+            Orders placed across your store
+            </h1> *@
+
+        </div>
+        <div class="col-xl-4 col-lg-5">
+            <div class="position-absolute bottom-0 end-0">
+                <form asp-action="DeletePost">
+                    <a class="btn btn-outline-primary" asp-action="Index">Back to List</a>
+                    <input type="hidden" asp-for="CusId" /> @* CusId *@
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    @*     <a class="btn btn-outline-primary" asp-area="" asp-controller="Product" asp-action="index">Add Product</a> *@
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+
+    <div class="col">
+
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Customers information</h6>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-lg-4 mr-4">
+                        <!-- Media -->
+                        <div class="card shadow mb-4">
+
+
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Media</h6>
+                            </div>
+
+                            <div class="card-body">
+
+
+                                <div class="card" style="border: 1px dashed #9d9da0; border-spacing: 50px">
+                                    <div class="card-body">
+                                        @* <div class="card mx-auto" style="height: 23rem; width: 23rem"> *@
+                                        <div class="mx-auto">
+ 
+                                               <img src="@ViewBag.ImgFile" class="card-img-top" />
+                                            
+
+                                        </div>
+                                     
+
+                                    </div>
+                                </div>
+               
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @*  กรอกข้อมูล *@
+                    <div class="col-lg-6">
+
+                        <div class="d-sm-flex align-items-center justify-content-between mb-5">
+                            <h1 class="h3 mb-2 text-gray-800">Customers from</h1>
+                        </div>
+                        <form asp-action="Edit">
+                            <!-- input Customer id : CusId -->
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="CusId" class="control-label">CUSTOMER ID</label>
+                                <input asp-for="CusId" class="form-control" disabled />
+                                <span asp-validation-for="CusId" class="text-danger"></span>
+                                @* value="@ViewBag.LastCustomerId" *@
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CusName" class="control-label">NAME</label>
+                                <input asp-for="CusName" class="form-control" disabled />
+                                <span asp-validation-for="CusName" class="text-danger"></span>
+                            </div>
+
+                            <!-- input Customer CusLogin : CusLogin -->
+                            <div class="form-group">
+                                <label asp-for="CusLogin" class="control-label">USER ID</label>
+                                <input asp-for="CusLogin" class="form-control" disabled />
+                                <span asp-validation-for="CusLogin" class="text-danger"></span>
+                            </div>
+                            <!-- input Customer CusPass : CusPass -->
+                            <div class="form-group">
+                                <label asp-for="CusPass" class="control-label">PASSWORD</label>
+                                <input asp-for="CusPass" class="form-control" disabled />
+                                <span asp-validation-for="CusPass" class="text-danger"></span>
+                            </div>
+
+                            <!-- input Customer CusEmail : CusEmail -->
+                            <div class="form-group">
+                                <label asp-for="CusEmail" class="control-label">E-MAIL</label>
+                                <input asp-for="CusEmail" class="form-control" disabled />
+                                <span asp-validation-for="CusEmail" class="text-danger"></span>
+                            </div>
+
+                            <!-- input Customer StartDate : StartDate -->
+                            <div class="form-group">
+                                <label asp-for="StartDate" class="control-label">START DATA</label>
+                                <input asp-for="StartDate" class="form-control" placeholder="yyyy-MM-dd" disabled />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+
+                            <!-- input Customer LastLogin : LastLogin -->
+                            <div class="form-group">
+                                <label asp-for="LastLogin" class="control-label">START DATA</label>
+                                <input asp-for="LastLogin" class="form-control" placeholder="yyyy-MM-dd" disabled />
+                                <span asp-validation-for="LastLogin" class="text-danger"></span>
+                            </div>
+                   @*          <div class="mb-3">
+                                <input class="btn btn-success" type="submit" value="Save form" />
+                            </div> *@
+                        </form>
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

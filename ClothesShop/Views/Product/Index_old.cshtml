@@ -1,0 +1,79 @@
+﻿@model IEnumerable<ClothesShop.ViewModels.PdVM>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+@{
+    var stext = ViewBag.stext;
+}
+
+<h1>Product</h1>
+@* <form autocomplete="off" id="submitForm" asp-controller="Product" asp-action="Index"> *@
+<form asp-controller="Product" asp-action="Index">
+    <div class="row">
+
+        <div class="col">
+            <a class="btn btn-primary" asp-action="Create">เพื่ม</a>
+        </div>
+        <br></br>
+
+        <div class="input-group">
+            <span class="input-group-text">ค้นหา</span>
+            <input type="search" class="form-control" id="autocompleteTextBox" name="stext" placeholder="Type a name here..." />
+            <button type="submit" class="btn btn-secondary">submit</button>
+        </div>
+        @*< ul class="list"></ul> *@
+    </div>
+</form>
+
+
+<table class="table">
+    <tr>
+        <th></th>
+        <th>รหัสสินค้า</th>
+        <th>ชื่อสินค้า</th>
+        <th>สีสินค้า</th>
+        <th>ขนาดสินค้า</th>
+        <th>ประเภท</th>
+        <th>ราคาขาย</th>
+        <th>คงเหลือ</th>
+    </tr>
+    @{
+        var i = 0;
+    }
+    @foreach(var item in Model)
+    {
+        i++;
+        /* Razor page ใช้เครื่องหมาย @ หน้าตัวแปรที่ต้องการแสดงผล */
+        <tr>
+        <td></td>
+        <td>@item.PdId</td>
+        <td>@item.PdName</td>
+        <td>@item.ColorName</td>
+        <td>@item.SizeName</td>
+        <td>@item.PdtName</td>
+        <td>@item.PdPrice</td>
+        <td>@item.PdStk</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.PdId">
+                <i class="bi bi-pencil-square"></i>
+            </a>        
+        </td>
+        <td>
+            <a asp-action="Delete" asp-route-id="@item.PdId">
+                <i class="bi bi-x-lg text-danger"></i>
+            </a>
+        </td>
+
+    </tr>
+    }
+</table>

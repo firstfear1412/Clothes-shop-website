@@ -1,0 +1,94 @@
+﻿
+@model ClothesShop.Models.Staff
+@{
+
+    Layout = "_AdminLayoutEdit";
+    <title>Create Employee</title>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+@{
+    var stext = ViewBag.stext;
+}
+
+@* 
+<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-2 text-gray-800">Create Customers</h1>
+</div>
+ *@
+
+
+@* test *@
+<div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+            <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+            <div class="col-lg-7">
+                <div class="p-5">
+                    <div class="text-center">
+                        <h1 class="h4 text-gray-900 mb-4">Employee Create an Account!</h1>
+                    </div>
+                    <form class="user" asp-action="Create">
+      
+                        <div class="form-group">
+                        @*     <label asp-for="StfName" class="control-label">USER NAME</label> *@
+                            <input asp-for="StfName" class="form-control form-control-user" placeholder="Enter Employee Name" required />
+                            <span asp-validation-for="StfName" class="text-danger"></span>
+                        </div>
+
+                        <!-- input Customer StfId : StfId -->
+                        <div class="form-group">
+                           @*  <label asp-for="StfId" class="control-label">EMPLOYEE ID </label> *@
+                            <input asp-for="StfId" class="form-control form-control-user" placeholder="Enter Employee ID" required />
+                            <span asp-validation-for="StfId" class="text-danger"></span>
+                        </div>
+                        <!-- input Customer StfPass : StfPass -->
+                        <div class="form-group">
+                            @* <label asp-for="StfPass" class="control-label">PASSWORD</label> *@
+                            <input asp-for="StfPass" class="form-control form-control-user" placeholder="Password" required />
+                            <span asp-validation-for="StfPass" class="text-danger"></span>
+                        </div>
+
+                        <!-- input Customer StartDate : StartDate -->
+                        <div class="form-group">
+                            @* <label type="hidden"  asp-for="StartDate" class="control-label"></label> *@
+                            <input type="hidden" asp-for="StartDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <input class="btn btn-success btn-user btn-block" type="submit" value="Create Account" />
+                        </div>
+                        <br>
+                     @*    <hr> *@
+                 
+                    </form>
+                    @* <hr> *@
+                 @*    <div class="text-center">
+                        <a class="small" href="forgot-password.html">Forgot Password?</a>
+                    </div>
+                    <div class="text-center">
+                        <a class="small" href="login.html">Already have an account? Login!</a>
+                    </div> *@
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

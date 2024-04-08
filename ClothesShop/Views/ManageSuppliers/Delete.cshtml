@@ -1,0 +1,149 @@
+﻿@model ClothesShop.Models.Supplier
+
+@{
+    Layout = "_AdminLayoutEdit";
+    <title>Delete Suppliers</title>
+}
+
+@* @if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+
+
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData.Peek("SuccessMessage")
+    </div>
+} *@
+
+
+
+
+@{
+    var stext = ViewBag.stext;
+}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-2 text-gray-800">Delete Suppliers</h1>
+</div>
+
+<div class="row">
+    <div class="row mb-4">
+        <div class="col-xl-8 col-lg-7">
+
+            @*      <div class="d-sm-flex align-items-center justify-content-between mb-1">
+            <h1 class="h4 mb-0 text-gray-800">
+            Add a new Product
+            </h1>
+            </div>
+            <h1 class="h6 mb-0 text-gray-800">
+            Orders placed across your store
+            </h1> *@
+
+        </div>
+        <div class="col-xl-4 col-lg-5">
+            <div class="position-absolute bottom-0 end-0">
+
+
+               @*  <a class="btn btn-outline-primary" asp-action="Index">Back to List</a> *@
+            @*     <form asp-action="DeletePost">
+                    <a class="btn btn-outline-primary" asp-action="Index">Back to List</a>
+                    <input type="hidden" asp-for="StfId" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+
+                </form> *@
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-xl-8 col-lg-9">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Suppliers information</h6>
+            </div>
+
+
+            <div class="card-body">
+             
+                <form asp-action="Delete">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="SupId" class="control-label">SUPPLIERS ID</label>
+                        <input type="hidden" asp-for="SupId" class="form-control" />
+                        <input asp-for="SupId" class="form-control" disabled />
+                        <span asp-validation-for="SupId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SupName" class="control-label">SUPPLIERS NAME</label>
+                        <input asp-for="SupName" class="form-control" disabled />
+                        <span asp-validation-for="SupName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="SupContact" class="control-label">CONTACT</label>
+                        <input asp-for="SupContact" class="form-control" disabled />
+                        <span asp-validation-for="SupContact" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="SupTel" class="control-label">TEL</label>
+                        <input asp-for="SupTel" class="form-control" disabled />
+                        <span asp-validation-for="SupTel" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="SupEmail" class="control-label">E-MAIL</label>
+                        <input asp-for="SupEmail" class="form-control" disabled />
+                        <span asp-validation-for="SupEmail" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="SupAdd" class="control-label">SUPPLIERS ADD</label>
+                        <input asp-for="SupAdd" class="form-control" disabled />
+                        <span asp-validation-for="SupAdd" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="SupRemark" class="control-label">REMARK</label>
+                        <input asp-for="SupRemark" class="form-control" disabled />
+                        <span asp-validation-for="SupRemark" class="text-danger"></span>
+                    </div>
+                </form>
+
+                    <br>
+                    <div class="mb-3">
+                        <form asp-action="DeletePost">
+                            <a class="btn btn-outline-primary" asp-action="Index">Back to List</a>
+                            <input type="hidden" asp-for="SupId" />
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+
+                        </form>
+                    </div>
+                    <br>
+
+               
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

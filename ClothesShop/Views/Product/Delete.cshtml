@@ -1,63 +1,362 @@
 ﻿@model ClothesShop.Models.Product
 
 @{
-    ViewData["Title"] = "Delete";
+ 
+    <title>Delete Product</title>
 }
 
-<h1>Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PdName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PdName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PdtId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PdtId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PdPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PdPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PdCost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PdCost)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PdStk)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PdStk)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PdLastBuy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PdLastBuy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PdLastSale)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PdLastSale)
-        </dd>
-    </dl>
-    
-    <form asp-action="DeletePost">
-        <input type="hidden" asp-for="PdId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+
+
+@{
+    // ViewData["Title"] = "Add a new Product";
+    // Layout = "_AdminLayout";
+    Layout = "_AdminLayoutEdit";
+
+
+
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-0 text-gray-800">Delete Product</h1>
 </div>
+
+            @* <div class="col-xl-4 col-lg-5">
+                <div class="position-absolute bottom-0 end-0">
+                    <form asp-action="DeletePost">
+                        <input type="hidden" asp-for="PdId" />
+                        <input type="submit" value="Delete" class="btn btn-danger" /> 
+                    </form>
+                </div>
+
+            </div> *@
+<div class="row">
+            <div class="row mb-4">
+                <div class="col-xl-8 col-lg-7">
+
+               @*      <div class="d-sm-flex align-items-center justify-content-between mb-1">
+                        <h1 class="h4 mb-0 text-gray-800">
+                            Add a new Product
+                        </h1>
+                    </div>
+                    <h1 class="h6 mb-0 text-gray-800">
+                        Orders placed across your store
+                    </h1> *@
+
+                </div>
+                <div class="col-xl-4 col-lg-5">
+                    <div class="position-absolute bottom-0 end-0">
+                        <form asp-action="DeletePost">
+                            <input type="hidden" asp-for="PdId" />
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                        @*     <a class="btn btn-outline-primary" asp-area="" asp-controller="Product" asp-action="index">Add Product</a> *@
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+</div>
+
+
+<form asp-action="Edit">
+    <div class="row">
+
+        <div class="col-xl-8 col-lg-7">
+
+            <!-- Product information -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Product information</h6>
+                </div>
+
+
+                <div class="card-body">
+
+                    <!-- input Product Code : PdID -->
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="PdId" class="control-label">PRODUCT CODE</label>
+                        <input asp-for="PdId" class="form-control" placeholder="ProductID-ColorCode-Size : XXX-XX-XX" disabled />
+                        <span asp-validation-for="PdId" class="text-danger"></span>
+                    </div>
+
+                    <!-- input Product Name : PdName -->
+                    <div class="form-group">
+                        <label asp-for="PdName" class="control-label">NAME</label>
+                        <input asp-for="PdName" class="form-control" placeholder="Product naem" disabled />
+                        <span asp-validation-for="PdName" class="text-danger"></span>
+                    </div>
+
+                    <!-- input Product Detail : PdDtls -->
+                    <div class="form-group">
+                        <label asp-for="PdDtls" class="control-label">DETAILL</label>
+                        <textarea asp-for="PdDtls" class="form-control" rows="4" placeholder="Product Description" disabled></textarea>
+                        <span asp-validation-for="PdDtls" class="text-danger"></span>
+                    </div>
+                    @* <hr> *@
+                </div>
+            </div>
+
+            <!-- Media -->
+
+
+
+            <!-- Variants -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Variants</h6>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="SizeId" class="control-label">SIZE</label>
+
+                                <select asp-for="SizeId" class="form-select" disabled>
+
+                                    @* <option value="" selected disabled>Select size</option> *@
+                                    <option value="">Select size</option>
+
+                                    @foreach (var size in (IEnumerable<SelectListItem>)ViewData["Size"])
+                                    {
+
+                                        <option value="@size.Value">@size.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="SizeId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="ColorId" class="control-label">COLOR</label>
+                                @* <select asp-for="ColorId" class="form-select" asp-items="ViewBag.Color"></select> *@
+                                @* <select asp-for="ColorId" class="form-select" ></select> *@
+
+                                <select asp-for="ColorId" class="form-select" disabled>
+                                    <option value="">Select color</option>
+                                    @foreach (var color in (IEnumerable<SelectListItem>)ViewData["Color"])
+                                    {
+
+                                        <option value="@color.Value">@color.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="ColorId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    @* <hr> *@
+                </div>
+            </div>
+
+
+
+            <!-- Organize -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Organize</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <!-- input product Target : TargetId -->
+                    <div class="form-group">
+                        <label asp-for="TargetId" class="control-label">TARGETS</label>
+                        @* <select asp-for="PdtId" class="form-select" asp-items="ViewBag.Pdt"></select> *@
+                        <select asp-for="TargetId" class="form-select" disabled>
+                            <option value="">Select product target</option>
+                            @foreach (var type in (IEnumerable<SelectListItem>)ViewData["Target"])
+                            {
+
+                                <option value="@type.Value">@type.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="TargetId" class="text-danger"></span>
+                    </div>
+                    <!-- input product type : PdtId -->
+                    <div class="form-group">
+                        <label asp-for="PdtId" class="control-label">CATEGORY</label>
+                        @* <select asp-for="PdtId" class="form-select" asp-items="ViewBag.Pdt"></select> *@
+                        <select asp-for="PdtId" class="form-select" disabled>
+                            <option value="">Select product type</option>
+                            @foreach (var type in (IEnumerable<SelectListItem>)ViewData["Pdt"])
+                            {
+
+                                <option value="@type.Value">@type.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="PdtId" class="text-danger"></span>
+                    </div>
+                    <!-- input SUPPLIERS : SupId -->
+                    <div class="form-group">
+                        <label asp-for="SupId" class="control-label">SUPPLIERS</label>
+                        @* <select asp-for="SupId" class="form-select" asp-items="ViewBag.Suppliers"></select> *@
+                        <select asp-for="SupId" class="form-select" disabled>
+                            <option value="">Select product suppliers</option>
+                            @foreach (var supp in (IEnumerable<SelectListItem>)ViewData["Suppliers"])
+                            {
+
+                                <option value="@supp.Value">@supp.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="SupId" class="text-danger"></span>
+                    </div>
+                    @* <hr> *@
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-6">
+
+                    <!-- Pricing -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Pricing</h6>
+
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <!-- input Price : PdPrice -->
+                            <div class="form-group">
+                                <label asp-for="PdPrice" class="control-label">BASE PRICE</label>
+                                <input asp-for="PdPrice" class="form-control" placeholder="Price" disabled />
+                                <span asp-validation-for="PdPrice" class="text-danger"></span>
+                            </div>
+
+                            <!-- input Cost : PdCost -->
+                            <div class="form-group">
+                                <label asp-for="PdCost" class="control-label">BASE COST</label>
+                                <input asp-for="PdCost" class="form-control" placeholder="Cost" disabled />
+                                <span asp-validation-for="PdCost" class="text-danger"></span>
+                            </div>
+                            @* <hr> *@
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-lg-6">
+                    <!--  Inventory -->
+
+                    <div class="card shadow mb-4">
+
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Inventory</h6>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <!-- input Status : SupId -->
+                            <div class="form-group">
+                                <label asp-for="StatusId" class="control-label">STATUS</label>
+                                @* <select asp-for="SupId" class="form-select" asp-items="ViewBag.Suppliers"></select> *@
+                                <select asp-for="StatusId" class="form-select" disabled>
+                                    <option value="">Status</option>
+                                    @foreach (var supp in (IEnumerable<SelectListItem>)ViewData["Status"])
+                                    {
+
+                                        <option value="@supp.Value">@supp.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="StatusId" class="text-danger"></span>
+                            </div>
+
+
+                            <!-- input quantity :  PdStk-->
+                            <div class="form-group">
+                                <label asp-for="PdStk" class="control-label">QUANTITY</label>
+                                <input asp-for="PdStk" class="form-control" placeholder="0" disabled />
+                                <span asp-validation-for="PdStk" class="text-danger"></span>
+                            </div>
+                            @* <hr> *@
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
+          
+        </div>
+
+</form>
+
+        <div class="col-xl-4 col-lg-5">
+            <!-- Media -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Media</h6>
+                </div>
+
+                <div class="card-body">
+
+
+                    <div class="card" style="border: 1px dashed #9d9da0; border-spacing: 50px">
+                        <div class="card-body">
+                            @* <div class="card mx-auto" style="height: 23rem; width: 23rem"> *@
+                            <div class="mx-auto" style="width: 23rem">
+                                @*   <img src="/imgpd/No_image2.png" class="card-img-top" /> *@
+                                <img src="@ViewBag.ImgFile" class="card-img-top" />
+
+                            </div>
+
+                        </div>
+                    </div>
+                   @*  <br> *@
+                    @* <hr /> *@
+
+
+                    <div class="col">
+                        <form method="post" asp-area="" asp-controller="Product" asp-action="Index">
+                            <div class="mb-3">
+                               @*  <label for="formFile" class="form-label">Select image file</label>
+                                <input class="form-control" type="file" id="formFile" accept="image/png" required value="@ViewBag.ImgFile"> *@
+                                @* <input class="btn btn-success" type="submit" value="upload"/>  *@
+                                @* <input class="form-control" type="file" id="formFile" accept="image/png" required value="@ViewBag.ImgFile"> *@
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+
+
+
+
+@* <div>
+    <a asp-action="Index">ย้อนกลับ</a>
+</div> *@
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

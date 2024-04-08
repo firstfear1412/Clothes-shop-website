@@ -1,0 +1,148 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<ClothesShop.ViewModels.ReportPDVM>
+@using System.Globalization;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // ViewData["Title"] = "บันทึกใหม่";
+    // Layout = "_AdminLayout";
+    Layout = "_AdminLayoutEdit";
+    <title>Daily Products Report</title>
+
+}
+@{
+    CultureInfo us = new CultureInfo("en-US");
+    string theDate;
+    //ถ้าไม่ได้ระบุวันให้เป็นวันปัจจุบัน
+    if (ViewBag.theDate != null)
+        theDate = ViewBag.theDate;
+    else
+        theDate = DateTime.Now.Date.ToString("yyyy-MM-dd", us);
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+@{
+    var stext = ViewBag.stext;
+}
+
+<!-- Page Heading -->
+
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    
+    <div class="card-body">
+        <form asp-controller="Report" asp-action="SalesDailyProducts">
+            <div class="row mt-1">
+                <div class="col-sm-6 col-md-8 col-lg-9">
+                    <h1 class="h1 mb-2 text-gray-800">Daily Products report</h1>
+                </div>
+                <div class="col text-end">
+                    <div class="input-group">
+                        <span class="input-group-text">Date</span>
+                        <input type="text" name="theDate" id="theDate" class="form-control" value="@theDate" />
+                        <button type="submit" class="btn btn-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                            </svg></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive">
+            
+            <table class="table table-bordered display" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+
+                        <th>Images</th>
+                        <th>Product NO</th>
+                        <th>Name</th>
+                        <th>Sales quantity</th>
+                        <th>income</th>
+
+
+
+
+
+
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+
+                        <th>Images</th>
+                        <th>Product NO</th>
+                        <th>Name</th>
+                        <th>Sales quantity</th>
+                        <th>income</th>
+                        
+
+
+                    </tr>
+                </tfoot>
+                <tbody>
+
+                    @{
+                        var i = 0;
+                    }
+
+
+                    @foreach (var item in Model)
+                    {
+
+                        var pdimg = "/imgpd/" + item.PdId + ".png";
+
+
+
+                        /* Razor page ใช้เครื่องหมาย @ หน้าตัวแปรที่ต้องการแสดงผล */
+                        <tr>
+                            @* <td>Img</td> *@ @* Img *@
+                            <td class="text-center">
+                                <div class="mx-auto" style="width: 6rem;">
+                                    <img src="@pdimg" class="card-img-top" />
+                                </div>
+
+                            </td>
+                            <td>@item.PdId</td> @* Product NO *@
+                            <td>@item.PdName</td> @* Name*@
+                            <td>@item.CdtlQty</td> @* Color *@
+                            <td>@item.CdtlMoney</td> @* Size *@
+
+
+
+
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        //ระบุ id ที่ต้องการใช้
+        $('#theDate').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: 'Y-m-d'
+        })
+
+    </script>
+}
+
+

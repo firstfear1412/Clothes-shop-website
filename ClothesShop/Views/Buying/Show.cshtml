@@ -1,0 +1,106 @@
+﻿@using ClothesShop.ViewModels;
+@using System.Globalization;
+@model dynamic;
+@{
+    CultureInfo us = new CultureInfo("en-US");
+    Layout = "_AdminLayoutEdit";
+    <title>Show Buying</title>
+
+}
+<div class="container">
+    @if (TempData["Errormessage"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Errormessage"]</div>
+    }
+    <!--อ่านค่าจาก Model เป็น Object-->
+    @foreach (Buying master in Model.Master)
+    {
+        <div class="card bg-white bg-opacity-50">
+            <div class="card-body">
+                <h4 class="card-title text-primary opacity-75">Document number @master.BuyId</h4>
+                <h5 class="card-subtitle mt-2 text-muted">
+                    Order date @master.BuyDate.Value.ToString("yyyy-MMM-dd",us)
+                </h5>
+                <h5>
+                    Supplier @master.SupId-@ViewBag.SupName [@master.Saleman]
+                    &nbsp;
+                    Reference Documents:@master.BuyDocId
+                </h5>
+                <div class="text-danger text-end">
+                    Quantity @master.BuyQty Amount @master.BuyMoney.Value.ToString("#,###.00")  Bath
+                </div>
+                <div class="text-secondary">
+                    Note:@master.BuyRemark
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a class="btn btn-danger" asp-controller="Buying" asp-action="Delete"
+                           asp-route-buyid="@master.BuyId" onclick=" return confirm('Confirm')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-x-fill" viewBox="0 0 16 16">
+                                <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M6.854 7.146 8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 1 1 .708-.708" />
+                            </svg> Delete
+                        </a>
+                    </div>
+                    <div class="col-sm-6 text-end">
+                        <a class="btn btn-warning" asp-controller="Buying" asp-action="Edit"
+                           asp-route-buyid="@master.BuyId">
+                            <i class="bi bi-pencil-fill"></i> Edit
+                        </a>
+                        <a class="btn btn-success" asp-controller="Buying" asp-action="Index" onclick="return confirm('The PO is correct.?')">
+                            Comfrim
+                        </a>
+                    </div>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    }
+</div>
+
+
+<!--Detail Part-->
+<div class="container">
+    <table class="table mt-3  table-hover">
+        <tr class="bg-light">
+            <th>
+                <a asp-action="CreateDtl" asp-route-buyid="@ViewBag.theid"
+                  class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                    </svg>
+                </a>
+            </th>
+            <th>Products</th>
+            <th class="text-start">Name</th>
+            <th class="text-end">Price</th>
+            <th class="text-center">Quantity</th>
+            <th class="text-end">Total</th>
+            <th></th>
+        </tr>
+        @{
+            var i = 0;
+        }
+        @foreach (BdVM detail in Model.Detail)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@detail.PdId</td>
+                <td>@detail.PdName</td>
+                <td class="text-end">@detail.BdtlPrice </td>
+                <td class="text-center">@detail.BdtlQty</td>
+                <td class="text-end">@detail.BdtlMoney </td>
+                <td class="text-center">
+                    <a asp-controller="Buying" asp-action="DeleteDtl"
+                        asp-route-pdid="@detail.PdId" asp-route-buyid="@detail.BuyId"
+                       onclick=" return confirm('Confirm deletion')">
+                        <div class="bi bi-x-lg text-danger"></div>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

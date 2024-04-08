@@ -16,6 +16,7 @@
     }
 </div>
 <!--อ่านค่าจาก Model เป็น Object-->
+<div class="container">
 @foreach (Cart master in Model.Master)
 {
     <div class="card bg-light">
@@ -28,14 +29,24 @@
                 จำนวนสินค้า @master.CartQty ยอดเงิน @master.CartMoney.Value.ToString("#,###.##") บาท
             </div>
             <hr />
-            <a class="btn btn-danger" asp-controller="Cart" asp-action="Delete"
-               asp-route-cartid="@master.CartId" onclick="return confirm('ยืนยันลบตะกร้า')">
-                <i class="bi-cart-x-fill"></i> ลบตะกร้าสินค้า
-            </a>
-            <a class="btn btn-primary" asp-controller="Cart" asp-action="Confirm"
-               asp-route-cartid="@master.CartId" onclick="return confirm('ยืนยันสั่งสินค้า')">
-                <i class="bi-currency-dollar"></i> ยืนยันสั่งสินค้า
-            </a>
+                @if(master.CartCf != "Y")
+                { 
+                    <a class="btn btn-danger" asp-controller="Cart" asp-action="Delete"
+                       asp-route-cartid="@master.CartId" onclick="return confirm('ยืนยันลบตะกร้า')">
+                        <i class="bi-cart-x-fill"></i> ลบตะกร้าสินค้า
+                    </a>
+                    <a class="btn btn-primary" asp-controller="Cart" asp-action="Confirm"
+                       asp-route-cartid="@master.CartId" onclick="return confirm('ยืนยันสั่งสินค้า')">
+                        <i class="bi-currency-dollar"></i> ยืนยันสั่งสินค้า
+                    </a>
+                }
+                else if(master.CartPay != "Y")
+                {
+                    <a class="btn btn-primary" asp-controller="Cart" asp-action="Paid"
+                       asp-route-cartid="@master.CartId" onclick="return confirm('ยืนยันชำระเงิน')">
+                        <i class="bi-currency-dollar"></i> ชำระเงิน
+                    </a>
+                }
         </div>
     </div>
 }
@@ -81,3 +92,4 @@
     }
 </table>
 
+</div>

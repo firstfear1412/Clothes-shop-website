@@ -1,85 +1,222 @@
 ﻿@model ClothesShop.Models.Customer
 
 @{
-    ViewData["Title"] = "Show";
+    ViewData["Title"] = "ข้อมูลส่วนตัว";
 }
 
-<h1>Show</h1>
 
-<div>
-    <h4>Customer</h4>
-    <hr />
-    <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <img src="@ViewBag.ImgFile" width="250" class="shadow" />
-            <div class="row mt-2">
-                <div class="col">
-                    <a class="btn btn-sm btn-danger" onclick="return confirm('ยืนยันการลบรูป')" asp-action="ImgDelete" asp-route-id="@Model.CusId">
-                        <i class="bg-x-lg "></i>
-                        ลบรูปภาพ
-                    </a>
-                </div>
-            </div>
+
+
+
+<div class="container">
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ErrorMessage"]
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.CusName)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CusName)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.CusLogin)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CusLogin)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.CusPass)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CusPass)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.CusEmail)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CusEmail)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.CusAdd)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CusAdd)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.StartDate)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.StartDate)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.LastLogin)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.LastLogin)
-                </dd>
-            </dl>
-            <div class="row">
-                <div class="col">
-                    <form method="post" enctype="multipart/form-data" asp-action="ImgUpload">
-                        <input type="hidden" name="theid" value="@Model.CusId"/>
-                        <input type="file" name="imgfiles" accept="image/jpeg" required/>
-                        <input class="btn btn-success" type="submit" value="upload"/>
-                    </form>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData.Peek("SuccessMessage")
+        </div>
+    }
+
+
+@*     <div class="d-sm-flex align-items-center justify-content-between mb-5">
+        <h1 class="h3 mb-2 text-gray-800">Profile</h1>
+    </div> *@
+    <div class="mt-2 text-muted">
+        <h1>ข้อมูลส่วนตัว</h1>
+    </div>
+    <div class="row">
+        <div class="row mb-4">
+            <div class="col-xl-8 col-lg-7">
+
+                @*                <div class="d-sm-flex align-items-center justify-content-between mb-1">
+                <h1 class="h4 mb-0 text-gray-800">
+                ข้อมูลผู้ใช้
+                </h1>
                 </div>
+                <h1 class="h6 mb-0 text-gray-800">
+                Orders placed across your store
+                </h1> *@
+
+            </div>
+            <div class="col-xl-4 col-lg-5">
+                <div class="position-relative">
+                    <div class="position-absolute bottom-0 end-0">
+                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">Back to Home</a>
+                        <a class="btn btn-outline-primary" asp-action="Show">Refresh</a>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-    
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CusId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+    <div class="row center">
+
+
+
+        <div class="col">
+
+            <!-- Basic Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-lg-4 mr-4">
+                            <!-- Media -->
+                            <div class="card shadow mb-4">
+
+
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-gray-800">รูปโปรไฟล์</h6>
+                                </div>
+
+                                <div class="card-body">
+
+
+                                    <div class="card" style="border: 1px dashed #9d9da0; border-spacing: 50px">
+                                        <div class="card-body">
+                                            @* <div class="card mx-auto" style="height: 23rem; width: 23rem"> *@
+                                            <div class="mx-auto">
+
+
+
+                                                <img src="@ViewBag.ImgFile" class="card-img-top" />
+
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                    <hr />
+
+                                    <div class="col">
+                                        <dev class="row">
+                                            <form method="post" enctype="multipart/form-data" asp-action="ImgUpload">
+                                                <div class="mb-3">
+
+                                                    <input type="hidden" name="theid" value="@Model.CusId" />
+
+                                                    <label for="formFile" class="form-label">Select image file</label>
+                                                    <input name="imgfiles" class="form-control" type="file" accept="image/png" required>
+                                                    <br>
+                                                    <input class="btn btn-success" type="submit" value="Upload" />
+                                                    @* <input class="form-control" type="file" id="formFile" accept="image/png" required value="@ViewBag.ImgFile"> *@
+
+                                                </div>
+                                            </form>
+                                            <div class="mb-3">
+                                                <a class="btn btn-danger" onclick="return confirm('ยืนยันการลบรูป')" asp-action="ImgDelete" asp-route-id="@Model.CusId">
+                                                    Delete
+                                                </a>
+                                            </div>
+                                        </dev>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*  กรอกข้อมูล *@
+                        <div class="col-lg-6">
+
+                            <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                <h1 class="h3 mb-2 text-muted">รายละเอียด</h1>
+                            </div>
+                            <form asp-action="Edit">
+                                <!-- input Customer id : CusId -->
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group  mb-2">
+                                    @*  <label asp-for="CusId" class="control-label">CUSTOMER ID</label> *@
+                                    <input type="hidden" asp-for="CusId" class="form-control" />
+                                    @*          <input asp-for="CusId" class="form-control" disabled /> *@
+                                    <span asp-validation-for="CusId" class="text-danger"></span>
+                                    @* value="@ViewBag.LastCustomerId" *@
+                                </div>
+                                <div class="form-group  mb-2">
+                                    <label class="control-label">ชื่อ-นามสกุล </label>
+                                    <input asp-for="CusName" class="form-control" placeholder="ชื่อผู้ใช้" required />
+                                    <span asp-validation-for="CusName" class="text-danger"></span>
+                                </div>
+
+                                <!-- input Customer CusLogin : CusLogin -->
+                                <div class="form-group mb-2">
+                                    @* <label asp-for="CusLogin" class="control-label">USER ID</label> *@
+                                    <label class="control-label">Username</label>
+                                    <input asp-for="CusLogin" class="form-control" disabled />
+                                    <span asp-validation-for="CusLogin" class="text-danger" placeholder="บัญชีผู้ใช้"></span>
+                                    <input type="hidden" asp-for="CusLogin" class="form-control" />
+                                </div>
+                                <!-- input Customer CusPass : CusPass -->
+                                <div class="form-group mb-2">
+                                    <label class="control-label">Password</label>
+                                    <input asp-for="CusPass" class="form-control" placeholder="รหัสผ่าน" required />
+                                    <span asp-validation-for="CusPass" class="text-danger"></span>
+                                </div>
+
+                                <!-- input Customer CusEmail : CusEmail -->
+                                <div class="form-group mb-2">
+                                    <label class="control-label">E-mail</label>
+                                    <input type="email" asp-for="CusEmail" class="form-control" placeholder="E-mail" required />
+                                    <span asp-validation-for="CusEmail" class="text-danger"></span>
+                                </div>
+
+                                <!-- input Customer cu : CusEmail -->
+                                <div class="form-group mb-2">
+                                    <label class="control-label">ที่อยู่</label>
+                                    @*    <input type="text" asp-for="CusAdd" class="form-control"/> *@
+                                    <textarea asp-for="CusAdd" class="form-control" rows="4" placeholder="ที่อยู่"></textarea>
+                                    <span asp-validation-for="CusAdd" class="text-danger"></span>
+                                </div>
+
+                                <!-- input Customer StartDate : StartDate -->
+                                <div class="form-group mb-2">
+                                    @*  <label asp-for="StartDate" class="control-label">START DATA</label> *@
+                                    <input type="hidden" asp-for="StartDate" class="form-control" placeholder="yyyy-MM-dd" disabled />
+                                    @*  <input asp-for="StartDate" class="form-control" placeholder="yyyy-MM-dd" disabled /> *@
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+
+                                <!-- input Customer LastLogin : LastLogin -->
+                                <div class="form-group mb-2">
+                                    @* <label asp-for="LastLogin" class="control-label">LAST LOGIN DATA</label> *@
+                                    <input type="hidden" asp-for=" LastLogin" class="form-control" placeholder="yyyy-MM-dd" disabled />
+                                    @*  <input asp-for="LastLogin" class="form-control" placeholder="yyyy-MM-dd" disabled /> *@
+                                    <span asp-validation-for="LastLogin" class="text-danger"></span>
+                                </div>
+                                <br>
+                                <div class="mb-3">
+                                    <input class="btn btn-success" type="submit" value="Save form" />
+                                </div>
+                            </form>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }

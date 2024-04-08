@@ -1,0 +1,117 @@
+﻿@{
+    var CartId = HttpContextAccessor.HttpContext.Session.GetString("CartId");
+    var CartMoney = HttpContextAccessor.HttpContext.Session.GetString("CartMoney");
+    var CartQty = HttpContextAccessor.HttpContext.Session.GetString("CartQty");
+
+    var CusId = HttpContextAccessor.HttpContext.Session.GetString("CusId");
+    var CusName = HttpContextAccessor.HttpContext.Session.GetString("CusName");
+}
+
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewData["Title"] -   Shop</title>
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+    <link rel="stylesheet" href="~/css/HomeStyles.css" asp-append-version="true" />
+    @*     <link rel="stylesheet" href="~/css/responsive.css" />
+    <link rel="stylesheet" href="~/css/meanmenu.min.css" /> *@
+    @* <link rel="stylesheet" href="~/css/main.css" /> *@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @* <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" asp-append-version="true" /> *@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" asp-append-version="true">
+</head>
+<body>
+    <div id="sticker-sticky-wrapper" class="sticky-wrapper" style="height:74px;">
+        <div class="top-header-area" id="sticker">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="main-menu-wrap">
+                            <!-- logo -->
+                            <div class="site-logo">
+                                <a href="index.html">
+                                    <img src="assets/img/logo.png" alt="">
+                                </a>
+                            </div>
+                            <!-- logo -->
+                            <!-- menu start -->
+                            <nav class="main-menu" style="display: block;">
+                                <ul>
+                                    <li class="current-list-item">
+                                        <a asp-controller="Home" asp-action="Index">Home</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Home" asp-action="men">Men</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Home" asp-action="women">Women</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Home" asp-action="kids">Kids</a>
+                                    </li>
+
+                                    @if (@HttpContextAccessor.HttpContext.Session.GetString("CusId") != null)
+                                    {
+                                        @* <a class="btn btn-success text-white ms-2" asp-controller="Customer" asp-action="Show" asp-route-id="@CusId">
+                                    <i class="bi bi-person"> @CusName</i>
+                                    </a> *@
+                                        <li style="float:right;">
+                                            <a href="#"><i class="bi bi-person-fill"></i>@CusName</a>
+                                            <ul class="sub-menu" style="z-index:9999; position:absolute;">
+                                                <li><a class="dropdown-item" asp-controller="Customer" asp-action="Show" asp-route-id="@CusId">ข้อมูลส่วนตัว</a></li>
+                                                <li><a class="dropdown-item" asp-area="" asp-controller="Cart" asp-action="List" asp-route-cusid="@CusId">ประวัติการสั่งซื้อ</a></li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-controller="Home" asp-action="Logout" onclick="return confirm('ออกจากระบบ')">
+                                                        <i class="bi bi-box-arrow-right"></i>
+                                                        Logout
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li style="float:right">
+                                            <a asp-controller="home" asp-action="Login"><i class="bi bi-person-fill"></i>เข้าสู่ระบบ</a>
+                                        </li>
+                                        @* <li style="float:right">
+                                    <a asp-controller="home" asp-action="Login"><i class="bi bi-person-fill"></i>เข้าสู่ระบบ</a>
+                                    <ul class="sub-menu">
+                                    <li><a class="dropdown-item" asp-controller="home" asp-action="Login">เข้าสู่ระบบ</a></li>
+                                    <li><a class="dropdown-item" asp-controller="home" asp-action="Register">สมัครสมาชิก</a></li>
+                                    </ul>
+                                    </li>  *@
+                                    }
+                                    @if (@HttpContextAccessor.HttpContext.Session.GetString("CartId") != null)
+                                    {
+                                        <li style="float:right">
+                                            <a asp-controller="Cart" asp-action="Show" asp-route-cartid="@CartId">
+                                                <i class="bi bi-bag-fill"></i>
+                                                @CartId [@CartMoney][@CartQty]
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @RenderBody()
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="~/js/NavScripts.js" asp-append-version="true"></script>
+    @*     <script src="~/js/jquery.meanmenu.min.js"></script>
+    <script src="~/js/jquery-1.11.3.min.js"></script>
+    <script src="~/js/main.js"></script>
+    <script src="~/js/sticker.js"></script> *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-js/1.3.0/sticky.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

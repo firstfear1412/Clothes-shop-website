@@ -1,0 +1,107 @@
+﻿
+@model ClothesShop.Models.Supplier
+@{
+
+    Layout = "_AdminLayoutEdit";
+    <title>Add Suppliers</title>
+
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage;
+    </div>
+}
+
+@{
+    var stext = ViewBag.stext;
+}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-5">
+    <h1 class="h3 mb-2 text-gray-800">Add Suppliers</h1>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-8 col-lg-9">
+
+        <!-- Product information -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Suppliers information</h6>
+            </div>
+
+
+            <div class="card-body w-75 p-3">
+                @* <div class="p-5"> *@
+
+
+                <form class="user" asp-action="Create">
+                 @*    <form asp-action="Create"> *@
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                        @* <label type="hidden" asp-for="SupId" class="control-label"></label> *@
+                            <input type="hidden" asp-for="SupId" value="SPXXX" class="form-control" />
+                            <span asp-validation-for="SupId" class="text-danger"></span>
+                            @* value="@ViewBag.LastCustomerId" *@
+                        </div>
+                        <div class="form-group">
+                       @*      <label asp-for="SupName" class="control-label">SUPPLIERS NAME</label> *@
+                        <input asp-for="SupName" class="form-control form-control-user" placeholder="Enter Suppliers Name" required />
+                            <span asp-validation-for="SupName" class="text-danger"></span>
+                        </div>
+
+                        <!-- input Customer StfId : StfId -->
+                        <div class="form-group">
+                @*             <label asp-for="SupContact" class="control-label">CONTACT</label> *@
+                        <input asp-for="SupContact" class="form-control form-control-user" placeholder="Contact" required />
+                            <span asp-validation-for="SupContact" class="text-danger"></span>
+                        </div>
+                        <!-- input Customer StfPass : StfPass -->
+                        <div class="form-group">
+                          @*   <label asp-for="SupTel" class="control-label">TEL</label> *@
+                        <input asp-for="SupTel" class="form-control form-control-user" placeholder="TEL" required />
+                            <span asp-validation-for="SupTel" class="text-danger"></span>
+                        </div>
+
+                        <!-- input Customer StartDate : StartDate -->
+                        <div class="form-group">
+                        @*     <label asp-for="SupEmail" class="control-label">E-MAIL</label> *@
+                        <input asp-for="SupEmail" class="form-control form-control-user" placeholder="Email" required />
+                            <span asp-validation-for="SupEmail" class="text-danger"></span>
+                        </div>
+                        <br>
+                    <div class="mb-3 w-50">
+                        <input class="btn btn-success btn-user btn-block" type="submit" value="Create Suppliers" />
+                        </div>
+        @*             <div class="mb-3">
+                        <input class="btn btn-success btn-user btn-block" type="submit" value="Register Account" />
+                    </div> *@
+                        <br>
+    
+                    </form>
+
+           @*      </div> *@
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

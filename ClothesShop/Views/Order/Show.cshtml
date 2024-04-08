@@ -1,0 +1,226 @@
+﻿@using ClothesShop.ViewModels;
+@using System.Globalization;
+@model dynamic;
+@{
+    CultureInfo us = new CultureInfo("en-US");
+    Layout = "_AdminLayoutEdit";
+    <title>Show Order</title>
+
+}
+<div>
+    @if (TempData["Errormessage"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Errormessage"]</div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData.Peek("SuccessMessage")
+        </div>
+    }
+
+
+
+    <!--อ่านค่าจาก Model เป็น Object-->
+    <div class="card bg-white bg-opacity-50">
+    @foreach (Cart master in Model.Master)
+    {
+        
+            <div class="card-body">
+                <h4 class="card-title text-primary opacity-75">Order NO. @master.CartId</h4>
+                <h5 class="card-subtitle mt-2 text-muted">
+                    Date Order @master.CartDate.Value.ToString("yyyy-MMM-dd", us)
+                </h5>
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-subtitle mt-2 text-muted">
+                            Status Payment:
+                            @if (master.CartPay.ToLower().Contains('n'))
+                            {
+                                <span class="text-danger">Not yet paid</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">Payment made</span>
+                            }
+                        </h5>
+                    </div>
+                </div>
+                <div class="text-danger text-end">
+                    Quantity @master.CartQty Amount @master.CartMoney.Value.ToString("#,###.##") Bath
+                </div>
+                <hr />
+                @* <a class="btn btn-danger" asp-controller="Cart" asp-action="Delete"
+                   asp-route-cartid="@master.CartId" onclick="return confirm('ยืนยันลบตะกร้า')">
+                    <i class="bi-cart-x-fill"></i> Paid
+                </a> *@
+            </div>
+       
+    }
+        <div class="row pl-3">
+            <div class="col col-md-2 col-sm-12 my-2">
+
+                @foreach (Cart master in Model.Master)
+                {
+                    <form asp-action="UpdatePay" method="post" class="form-inline">
+                        <input type="hidden" name="CartId" value="@master.CartId" />
+                        <select asp-for="@master.CartPay" name="CartPay" class="form-select form-control w-25 mr-2" required>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+
+                        </select>
+
+                        <input class="btn btn-success" type="submit" value="Update Payment " />
+
+
+                    </form>
+                }
+            </div>
+
+            <div class="col col-md-2 col-sm-12 my-2">
+
+                @foreach (Cart master in Model.Master)
+                {
+                    <form asp-action="UpdateVoid" method="post" class="form-inline">
+                        <input type="hidden" name="CartId" value="@master.CartId" />
+                        <select asp-for="@master.CartVoid" name="CartVoid" class="form-select form-control w-25 mr-2" required>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+
+                        <input class="btn btn-success" type="submit" value="Update Void" />
+
+
+                    </form>
+                }
+            </div>  
+
+            <div class="col col-md-3 col-sm-12 my-2">
+
+                @foreach (Cart master in Model.Master)
+                {
+                    <form asp-action="UpdateSend" method="post" class="form-inline">
+                        <input type="hidden" name="CartId" value="@master.CartId" />
+                        <select asp-for="@master.CartSend" name="CartSend" class="form-select form-control w-50 mr-2" required>
+                            <option value="">ยังไม่ได้ชำระเงิน</option>
+                            <option value="กำลังจัดเตรียมสินค้า">กำลังจัดเตรียมสินค้า</option>
+                            <option value="กำลังจัดส่งสินค้า">กำลังจัดส่งสินค้า</option>
+                            <option value="สำเร็จ">สำเร็จ</option>
+                        </select>
+
+                        <input class="btn btn-success" type="submit" value="Update Delivery" />
+
+
+                    </form>
+                }
+            </div>
+            <div class="col col-md-0 col-sm-5 my-2"></div>
+
+        </div>
+
+        <br>
+    </div>
+    
+
+    </div>
+    
+<br>
+
+
+<div class="card shadow mb-4">
+   
+    <div class="card-body">
+        <form asp-controller="Order" asp-action="index">
+            <div class="row mt-1 mb-2">
+                <div class="col-sm-6 col-md-8 col-lg-9">
+                    <h1 class="h3 mb-2 text-gray-800"> Order Details</h1>
+                </div>
+                
+                
+            </div>
+        </form>
+        <div class="table-responsive">
+
+            <table class="table table-bordered display" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>NO.</th>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th class="text-end"> Price/piece</th>
+                        <th class="text-end">Total Price</th>
+                        <th class="text-center">Quantity</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>NO.</th>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Price/piece</th>
+                        <th>Total Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+
+                    @{
+                        var i = 0;
+                    }
+
+
+                    @foreach (Order detail in Model.Detail)
+                    {
+
+                        i++;
+
+                        var pdimg = "/imgpd/" + detail.PdId + ".png";
+
+
+
+                        /* Razor page ใช้เครื่องหมาย @ หน้าตัวแปรที่ต้องการแสดงผล */
+                        <tr>
+                            @* <td>Img</td> *@ @* Img *@
+                            <td>@i</td>
+                            <td class="text-center">
+                                <div class="mx-auto" style="width: 6rem;">
+                                    <img src="@pdimg" class="card-img-top" />
+                                </div>
+
+                            </td>
+
+                            <td>@detail.PdName</td>
+                            <td>@detail.ColorName </td>
+                            <td>@detail.SizeName </td>
+                            <td>@detail.BdtlPrice </td>
+                            <td>@detail.BdtlMoney </td>
+                            <td>@detail.BdtlQty</td>
+
+
+                            
+
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+   
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+
+
+
+
+
