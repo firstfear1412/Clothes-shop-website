@@ -8,7 +8,7 @@
         public string PdName { get; set; } = null!;
         public byte SizeId { get; set; }
         public string SizeName { get; set; }
-        public double? PdStk { get; set; }
+        public int? PdStk { get; set; }
         public double? PdPrice { get; set; }
     }
 }
